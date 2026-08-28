@@ -1,0 +1,1150 @@
+<title>Vehicle Utilities Supply and Maintenance System</title>
+
+<style>
+  :root {
+    color-scheme: light;
+    --paper: #fbfbfe;
+    --surface: #ffffff;
+    --sunk: #f4f5fa;
+    --ink: #191c2b;
+    --muted: #666c85;
+    --line: #e3e4ef;
+    --line-strong: #c9cbdd;
+    --indigo: #4f46e5;
+    --sky: #0284c7;
+    --violet: #6d3fd4;
+    --blue: #2563eb;
+    --teal: #0d8b7d;
+    --amber: #a8700a;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --paper: #111320;
+      --surface: #191c2a;
+      --sunk: #1f2231;
+      --ink: #eceef7;
+      --muted: #9aa0b8;
+      --line: #2a2e40;
+      --line-strong: #3b4055;
+      --indigo: #9c96f5;
+      --sky: #4cc0f5;
+      --violet: #b49bfb;
+      --blue: #74a6fb;
+      --teal: #35d2bd;
+      --amber: #e2b055;
+    }
+  }
+
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --paper: #111320;
+    --surface: #191c2a;
+    --sunk: #1f2231;
+    --ink: #eceef7;
+    --muted: #9aa0b8;
+    --line: #2a2e40;
+    --line-strong: #3b4055;
+    --indigo: #9c96f5;
+    --sky: #4cc0f5;
+    --violet: #b49bfb;
+    --blue: #74a6fb;
+    --teal: #35d2bd;
+    --amber: #e2b055;
+  }
+
+  :root[data-theme='light'] {
+    color-scheme: light;
+    --paper: #fbfbfe;
+    --surface: #ffffff;
+    --sunk: #f4f5fa;
+    --ink: #191c2b;
+    --muted: #666c85;
+    --line: #e3e4ef;
+    --line-strong: #c9cbdd;
+    --indigo: #4f46e5;
+    --sky: #0284c7;
+    --violet: #6d3fd4;
+    --blue: #2563eb;
+    --teal: #0d8b7d;
+    --amber: #a8700a;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 56px 24px 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .prose {
+    max-width: 68ch;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.9rem);
+  }
+  h2 {
+    font-size: clamp(1.35rem, 3vw, 1.7rem);
+  }
+  h3 {
+    font-size: 1.05rem;
+    letter-spacing: -0.01em;
+  }
+  p {
+    margin: 0;
+  }
+
+  .eyebrow {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .lede {
+    font-size: 1.12rem;
+    color: var(--muted);
+    max-width: 60ch;
+  }
+
+  code,
+  .mono {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.87em;
+  }
+  code {
+    background: var(--sunk);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.08em 0.34em;
+  }
+
+  a {
+    color: var(--indigo);
+  }
+
+  /* ---- masthead ---- */
+  header.masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 32px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .mark {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    padding: 3px 8px;
+    color: var(--muted);
+  }
+  .chip.live {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+
+  /* ---- sections ---- */
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .section-head {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 68ch;
+  }
+
+  /* ---- figures ---- */
+  figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 24px;
+    overflow-x: auto;
+  }
+  figure svg {
+    display: block;
+    min-width: 620px;
+    max-width: 100%;
+    height: auto;
+    color: var(--ink);
+  }
+  figcaption {
+    font-size: 0.87rem;
+    color: var(--muted);
+    max-width: 70ch;
+  }
+  .svg-box {
+    fill: var(--surface);
+    stroke: var(--line-strong);
+    stroke-width: 1.5;
+  }
+  .svg-box-sunk {
+    fill: var(--sunk);
+    stroke: var(--line-strong);
+    stroke-width: 1.5;
+  }
+  .svg-title {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 12px;
+    font-weight: 600;
+    fill: var(--ink);
+  }
+  .svg-sub {
+    font-size: 11px;
+    fill: var(--muted);
+  }
+  .svg-edge {
+    fill: none;
+    stroke: var(--line-strong);
+    stroke-width: 1.5;
+  }
+  .svg-edge-accent {
+    fill: none;
+    stroke: var(--indigo);
+    stroke-width: 1.75;
+  }
+  .svg-label {
+    font-size: 11px;
+    fill: var(--muted);
+  }
+  .svg-label-accent {
+    font-size: 11px;
+    font-weight: 600;
+    fill: var(--indigo);
+  }
+
+  /* ---- tables ---- */
+  .table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.92rem;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  thead th {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--sunk);
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  td.center {
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .role-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    vertical-align: 1px;
+  }
+  .yes {
+    color: var(--teal);
+    font-weight: 700;
+  }
+  .partial {
+    color: var(--amber);
+    font-weight: 700;
+  }
+  .no {
+    color: var(--muted);
+  }
+
+  /* ---- problem grid ---- */
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card .from {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--line-strong);
+  }
+  .card .to {
+    font-weight: 600;
+  }
+
+  /* ---- tree ---- */
+  pre.tree {
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px 24px;
+    overflow-x: auto;
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.82rem;
+    line-height: 1.85;
+  }
+  pre.tree b {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  pre.tree span {
+    color: var(--muted);
+  }
+
+  /* ---- steps ---- */
+  .phase {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .phase-label {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .steps {
+    display: flex;
+    flex-direction: column;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 34px 1fr auto;
+    align-items: baseline;
+    gap: 14px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .step:last-child {
+    border-bottom: none;
+  }
+  .step-n {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .step-name {
+    font-weight: 500;
+  }
+  .step.done .step-n {
+    color: var(--teal);
+  }
+  .status {
+    font-family: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .status.done {
+    color: var(--teal);
+  }
+  .status.next {
+    color: var(--indigo);
+  }
+  .step-note {
+    grid-column: 2 / -1;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  footer {
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    max-width: 68ch;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--indigo);
+    outline-offset: 2px;
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="mark">
+      <svg width="40" height="40" viewBox="0 0 64 64" fill="none" role="img" aria-label="VUSMS logo">
+        <defs>
+          <linearGradient id="vusms-logo-grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#4f46e5" />
+            <stop offset="1" stop-color="#0d8b7d" />
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" rx="16" fill="url(#vusms-logo-grad)" />
+        <path d="M18 42a14 14 0 0 1 28 0" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" />
+        <path d="M24 42h-4M44 42h4M32 24v4" stroke="#fff" stroke-width="2.6" stroke-linecap="round" />
+        <circle cx="32" cy="42" r="3.4" fill="#fff" />
+        <path d="M32 42l9-6.5" stroke="#fff" stroke-width="3.2" stroke-linecap="round" />
+      </svg>
+      <div>
+        <div class="eyebrow">Fleet maintenance platform · VUSMS</div>
+      </div>
+    </div>
+
+    <h1>Vehicle Utilities Supply &amp; Maintenance System</h1>
+
+    <p class="lede">
+      Owners profile every vehicle and put every service on a schedule; a nightly worker warns them before maintenance falls due; and they book
+      admin-verified service centers and order parts from verified suppliers — with role-scoped dashboards for owners, service centers, suppliers,
+      administrators and a single seeded super-admin.
+    </p>
+
+    <div class="chips">
+      <span class="chip">0 of 21 steps built</span>
+      <span class="chip">Scaffold &amp; plan</span>
+      <span class="chip">Next.js 16</span>
+      <span class="chip">React 19</span>
+      <span class="chip">TypeScript strict</span>
+      <span class="chip">Tailwind v4</span>
+      <span class="chip">MongoDB</span>
+      <span class="chip">PM2 · port 3104</span>
+      <span class="chip">English only</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <h2>What it centralizes</h2>
+      <p class="lede">
+        Owners track maintenance by memory and keep records in a glovebox. Three failures follow — missed service dates, lost history, unreachable
+        garages — and each one becomes a single source of truth.
+      </p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <span class="from">Service dates kept in your head</span>
+        <span class="to">A schedule that computes what is due</span>
+        <p class="step-note">
+          Each vehicle carries interval rules by months or mileage; a worker advances
+          <code>UPCOMING → DUE → OVERDUE</code>
+          and files a reminder before the date passes, not after.
+        </p>
+      </div>
+      <div class="card">
+        <span class="from">Receipts in the glovebox</span>
+        <span class="to">A maintenance history that persists</span>
+        <p class="step-note">
+          Every service writes a
+          <code>MaintenanceRecord</code>
+          with mileage and cost in integer minor units — the vehicle's log outlives the paper and the owner.
+        </p>
+      </div>
+      <div class="card">
+        <span class="from">Calling around for a garage</span>
+        <span class="to">Verified centers and suppliers, one tap away</span>
+        <p class="step-note">
+          Owners book only admin-verified service centers and order only from verified suppliers; an unverified account is visible but not
+          transactable.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Who uses it</h2>
+      <p>Five roles, each with a home dashboard and a hard boundary. Access is decided in the service layer, not by hiding a button.</p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Capability</th>
+            <th style="text-align: center">
+              <span class="role-dot" style="background: var(--indigo)"></span>
+              Super-admin
+            </th>
+            <th style="text-align: center">
+              <span class="role-dot" style="background: var(--violet)"></span>
+              Admin
+            </th>
+            <th style="text-align: center">
+              <span class="role-dot" style="background: var(--blue)"></span>
+              Owner
+            </th>
+            <th style="text-align: center">
+              <span class="role-dot" style="background: var(--teal)"></span>
+              Center
+            </th>
+            <th style="text-align: center">
+              <span class="role-dot" style="background: var(--amber)"></span>
+              Supplier
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Seed, create &amp; govern admin accounts</td>
+            <td class="center yes">●</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+          </tr>
+          <tr>
+            <td>Verify &amp; approve centers and suppliers</td>
+            <td class="center partial">○</td>
+            <td class="center yes">●</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+          </tr>
+          <tr>
+            <td>Govern all accounts · read platform reports</td>
+            <td class="center yes">●</td>
+            <td class="center yes">●</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+          </tr>
+          <tr>
+            <td>Register vehicles · set maintenance schedules</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center yes">●</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+          </tr>
+          <tr>
+            <td>Book verified centers · order supplies · pay invoices</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center yes">●</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+          </tr>
+          <tr>
+            <td>Progress assigned requests · record work · issue service invoices</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center yes">●</td>
+            <td class="center no">—</td>
+          </tr>
+          <tr>
+            <td>List products &amp; stock · fulfill orders · issue order invoices</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center no">—</td>
+            <td class="center yes">●</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="step-note" style="max-width: 68ch">
+      ● full · ○ oversight (verify and govern, not transact) · — no access. Exactly one super-admin exists — a partial unique index on
+      <code>role</code>
+      permits a single seeded row, immutable even to itself, and the only account that can govern admins. Admin governs accounts and reads
+      platform-wide reports but deliberately never books, sells, ships or invoices on anyone's behalf; governance and business are separate hands.
+      Role is immutable after creation, and nobody edits their own role.
+      <strong>A hidden button is not a closed door — the rule lives in the service.</strong>
+    </p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>How a request is served</h2>
+      <p>
+        The layered path every write takes — from the same-origin proxy to the DTO that comes back. Its point is the return arrow: a rejected action
+        comes back as
+        <em>data</em>
+        the form can render field by field, not as an exception someone has to catch.
+      </p>
+    </div>
+
+    <figure>
+      <svg
+        viewBox="0 0 900 300"
+        role="img"
+        aria-label="A request flows left to right from the client form through proxy.ts, then the server action or route handler with zod validation, then the service, then the Mongoose model; the model's rows are mapped to a DTO and a SingleResult travels back to the form as success or field errors.">
+        <defs>
+          <marker id="arw-life" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+          </marker>
+        </defs>
+
+        <rect class="svg-box-sunk" x="8" y="44" width="140" height="64" rx="3" />
+        <text class="svg-title" x="78" y="72" text-anchor="middle">form</text>
+        <text class="svg-sub" x="78" y="90" text-anchor="middle">client · fetch</text>
+
+        <rect class="svg-box" x="192" y="44" width="140" height="64" rx="3" />
+        <text class="svg-title" x="262" y="72" text-anchor="middle">proxy.ts</text>
+        <text class="svg-sub" x="262" y="90" text-anchor="middle">same-origin · session</text>
+
+        <rect class="svg-box" x="376" y="44" width="140" height="64" rx="3" />
+        <text class="svg-title" x="446" y="72" text-anchor="middle">action / route</text>
+        <text class="svg-sub" x="446" y="90" text-anchor="middle">gate · zod parse</text>
+
+        <rect class="svg-box" x="560" y="44" width="140" height="64" rx="3" />
+        <text class="svg-title" x="630" y="72" text-anchor="middle">service</text>
+        <text class="svg-sub" x="630" y="90" text-anchor="middle">business rules</text>
+
+        <rect class="svg-box" x="744" y="44" width="140" height="64" rx="3" />
+        <text class="svg-title" x="814" y="72" text-anchor="middle">model</text>
+        <text class="svg-sub" x="814" y="90" text-anchor="middle">Mongoose · MongoDB</text>
+
+        <g color="currentColor">
+          <line class="svg-edge" x1="148" y1="76" x2="188" y2="76" marker-end="url(#arw-life)" />
+          <line class="svg-edge" x1="332" y1="76" x2="372" y2="76" marker-end="url(#arw-life)" />
+          <line class="svg-edge" x1="516" y1="76" x2="556" y2="76" marker-end="url(#arw-life)" />
+          <line class="svg-edge" x1="700" y1="76" x2="740" y2="76" marker-end="url(#arw-life)" />
+        </g>
+        <text class="svg-label" x="168" y="68" text-anchor="middle">request</text>
+        <text class="svg-label" x="352" y="68" text-anchor="middle">authorized</text>
+        <text class="svg-label" x="536" y="68" text-anchor="middle">validated</text>
+        <text class="svg-label" x="720" y="68" text-anchor="middle">write</text>
+
+        <rect class="svg-box-sunk" x="560" y="150" width="324" height="58" rx="3" />
+        <text class="svg-title" x="580" y="174">DTO mapper</text>
+        <text class="svg-sub" x="580" y="194">vehicleFromEntity() — never leaks password, storageKey, _id</text>
+
+        <g color="currentColor">
+          <path class="svg-edge" d="M 814 108 L 814 150" marker-end="url(#arw-life)" />
+          <path class="svg-edge-accent" d="M 560 179 L 78 179 L 78 110" marker-end="url(#arw-life)" />
+        </g>
+        <text class="svg-label-accent" x="250" y="171">SingleResult&lt;Dto&gt; · ok or field errors</text>
+
+        <rect class="svg-box-sunk" x="8" y="238" width="876" height="46" rx="3" />
+        <text class="svg-sub" x="28" y="266">
+          Expected failures — an unverified center, a duplicate VIN, thin stock — return a failure Result; only unexpected faults throw.
+        </text>
+      </svg>
+      <figcaption>
+        Validation lives inside the action, never only in the browser; the service holds the rules and re-checks them against the live session; the
+        model is the only writer. The return value is the point — a rejected write comes back as a
+        <code>SingleResult</code>
+        the form renders field by field.
+        <strong>A refused action is data, not an exception.</strong>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>How a reminder fires</h2>
+      <p>
+        The feature the platform exists for. A schedule that falls due is worth nothing until someone is told — so a separate worker turns a crossed
+        date into a notification, exactly once.
+      </p>
+    </div>
+
+    <figure>
+      <svg
+        viewBox="0 0 880 300"
+        role="img"
+        aria-label="A MaintenanceSchedule whose due date passes is advanced to DUE or OVERDUE, swept nightly by the send:reminders worker running as a second PM2 app, which enqueues a Notification delivered in-app and by email; lastNotifiedAt keeps the sweep idempotent.">
+        <defs>
+          <marker id="arw-cron" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+          </marker>
+        </defs>
+
+        <rect class="svg-box" x="8" y="40" width="176" height="66" rx="3" />
+        <text class="svg-title" x="96" y="68" text-anchor="middle">MaintenanceSchedule</text>
+        <text class="svg-sub" x="96" y="86" text-anchor="middle">status: UPCOMING</text>
+
+        <rect class="svg-box" x="228" y="40" width="176" height="66" rx="3" />
+        <text class="svg-title" x="316" y="68" text-anchor="middle">computeDue()</text>
+        <text class="svg-sub" x="316" y="86" text-anchor="middle">→ DUE / OVERDUE</text>
+
+        <rect class="svg-box" x="448" y="40" width="176" height="66" rx="3" stroke="currentColor" />
+        <text class="svg-title" x="536" y="68" text-anchor="middle">send:reminders</text>
+        <text class="svg-label-accent" x="536" y="86" text-anchor="middle">node-cron · 2nd PM2 app</text>
+
+        <rect class="svg-box" x="668" y="40" width="176" height="66" rx="3" />
+        <text class="svg-title" x="756" y="68" text-anchor="middle">Notification</text>
+        <text class="svg-sub" x="756" y="86" text-anchor="middle">IN_APP · EMAIL</text>
+
+        <g color="currentColor">
+          <line class="svg-edge" x1="184" y1="73" x2="224" y2="73" marker-end="url(#arw-cron)" />
+          <line class="svg-edge" x1="404" y1="73" x2="444" y2="73" marker-end="url(#arw-cron)" />
+          <line class="svg-edge-accent" x1="624" y1="73" x2="664" y2="73" marker-end="url(#arw-cron)" />
+        </g>
+        <text class="svg-label" x="204" y="65" text-anchor="middle">due date</text>
+        <text class="svg-label" x="424" y="65" text-anchor="middle">nightly sweep</text>
+        <text class="svg-label-accent" x="644" y="65" text-anchor="middle">enqueue</text>
+
+        <line class="svg-edge" x1="536" y1="106" x2="536" y2="150" stroke-dasharray="3 3" color="currentColor" />
+        <rect class="svg-box-sunk" x="360" y="150" width="360" height="54" rx="3" />
+        <text class="svg-sub" x="380" y="181">lastNotifiedAt keeps the sweep idempotent — no re-notify.</text>
+
+        <path class="svg-edge" d="M 756 106 L 756 214" marker-end="url(#arw-cron)" color="currentColor" />
+        <rect class="svg-box" x="668" y="214" width="176" height="56" rx="3" />
+        <text class="svg-title" x="756" y="238" text-anchor="middle">owner's feed</text>
+        <text class="svg-sub" x="756" y="256" text-anchor="middle">in-app + email</text>
+
+        <text class="svg-label-accent" x="8" y="252">A due date the owner never sees is a breakdown with a countdown.</text>
+      </svg>
+      <figcaption>
+        The reminder worker is a second PM2 app, not a thread in the web server — node-cron sweeps
+        <code>DUE</code>
+        and
+        <code>OVERDUE</code>
+        schedules on a fixed cadence via
+        <code>cron_restart</code>
+        , enqueues a
+        <code>Notification</code>
+        per vehicle and mails through nodemailer, falling back to the log when SMTP is absent. Setting
+        <code>lastNotifiedAt</code>
+        makes the sweep idempotent, so a re-run never double-notifies.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The data model</h2>
+      <p>
+        Ten core collections. Two of them —
+        <span class="mono">User</span>
+        and
+        <span class="mono">Vehicle</span>
+        — are referenced by everything else, and the maintenance this platform automates lives on the one entity that carries a VIN, a mileage and a
+        due date.
+      </p>
+    </div>
+
+    <figure>
+      <svg
+        viewBox="0 0 880 400"
+        role="img"
+        aria-label="User is referenced by the Vehicle it owns and by the one-to-one ServiceCenterProfile and SupplierProfile. Vehicle carries MaintenanceSchedules and is booked as ServiceRequests assigned to a service center. SupplierProfile lists Products ordered in Orders. ServiceRequests and Orders are billed as Invoices, and a Review targets a center, supplier or product.">
+        <defs>
+          <marker id="arw-erd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor" />
+          </marker>
+        </defs>
+
+        <rect class="svg-box" x="16" y="150" width="150" height="100" rx="3" />
+        <text class="svg-title" x="91" y="186" text-anchor="middle">User</text>
+        <text class="svg-sub" x="91" y="206" text-anchor="middle">email · role</text>
+        <text class="svg-sub" x="91" y="224" text-anchor="middle">isApproved · isActive</text>
+
+        <rect class="svg-box" x="250" y="36" width="160" height="74" rx="3" stroke="currentColor" />
+        <text class="svg-title" x="330" y="68" text-anchor="middle">Vehicle</text>
+        <text class="svg-label-accent" x="330" y="88" text-anchor="middle">vin · reg · mileage</text>
+
+        <rect class="svg-box" x="250" y="163" width="160" height="74" rx="3" />
+        <text class="svg-title" x="330" y="195" text-anchor="middle">ServiceCenterProfile</text>
+        <text class="svg-sub" x="330" y="213" text-anchor="middle">isVerified · rating</text>
+
+        <rect class="svg-box" x="250" y="290" width="160" height="74" rx="3" />
+        <text class="svg-title" x="330" y="322" text-anchor="middle">SupplierProfile</text>
+        <text class="svg-sub" x="330" y="340" text-anchor="middle">isVerified · rating</text>
+
+        <rect class="svg-box" x="480" y="36" width="160" height="74" rx="3" />
+        <text class="svg-title" x="560" y="68" text-anchor="middle">MaintenanceSchedule</text>
+        <text class="svg-sub" x="560" y="86" text-anchor="middle">nextDueDate · status</text>
+
+        <rect class="svg-box" x="480" y="163" width="160" height="74" rx="3" stroke="currentColor" />
+        <text class="svg-title" x="560" y="195" text-anchor="middle">ServiceRequest</text>
+        <text class="svg-label-accent" x="560" y="213" text-anchor="middle">status · transitions</text>
+
+        <rect class="svg-box" x="480" y="290" width="160" height="74" rx="3" />
+        <text class="svg-title" x="560" y="322" text-anchor="middle">Product</text>
+        <text class="svg-sub" x="560" y="340" text-anchor="middle">sku · price · stock</text>
+
+        <rect class="svg-box" x="712" y="36" width="160" height="74" rx="3" />
+        <text class="svg-title" x="792" y="68" text-anchor="middle">Invoice</text>
+        <text class="svg-sub" x="792" y="86" text-anchor="middle">SERVICE / ORDER · total</text>
+
+        <rect class="svg-box" x="712" y="163" width="160" height="74" rx="3" />
+        <text class="svg-title" x="792" y="195" text-anchor="middle">Order</text>
+        <text class="svg-sub" x="792" y="213" text-anchor="middle">items · total · status</text>
+
+        <rect class="svg-box" x="712" y="290" width="160" height="74" rx="3" />
+        <text class="svg-title" x="792" y="322" text-anchor="middle">Review</text>
+        <text class="svg-sub" x="792" y="340" text-anchor="middle">rating · target</text>
+
+        <g color="currentColor">
+          <line class="svg-edge" x1="166" y1="178" x2="250" y2="80" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="166" y1="200" x2="250" y2="200" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="166" y1="222" x2="250" y2="322" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="410" y1="73" x2="480" y2="73" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="410" y1="96" x2="480" y2="190" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="410" y1="200" x2="480" y2="200" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="410" y1="327" x2="480" y2="327" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="640" y1="186" x2="712" y2="92" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="640" y1="316" x2="712" y2="220" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="792" y1="163" x2="792" y2="112" marker-end="url(#arw-erd)" />
+          <line class="svg-edge" x1="712" y1="327" x2="642" y2="327" marker-end="url(#arw-erd)" />
+        </g>
+
+        <text class="svg-label" x="206" y="120" text-anchor="middle">owns</text>
+        <text class="svg-label" x="208" y="194" text-anchor="middle">1:1</text>
+        <text class="svg-label" x="200" y="286" text-anchor="middle">1:1</text>
+        <text class="svg-label" x="445" y="66" text-anchor="middle">schedules</text>
+        <text class="svg-label" x="452" y="150" text-anchor="middle">booked</text>
+        <text class="svg-label" x="445" y="194" text-anchor="middle">assigned</text>
+        <text class="svg-label" x="445" y="320" text-anchor="middle">lists</text>
+        <text class="svg-label" x="678" y="132" text-anchor="middle">SERVICE</text>
+        <text class="svg-label" x="678" y="272" text-anchor="middle">ordered</text>
+        <text class="svg-label-accent" x="800" y="140" text-anchor="start">ORDER</text>
+        <text class="svg-label" x="676" y="320" text-anchor="middle">reviews</text>
+      </svg>
+      <figcaption>
+        A vehicle names its owner and carries the VIN, registration and mileage a service is keyed on. An order names its buyer (an owner) and a
+        verified supplier; an invoice references either a
+        <span class="mono">ServiceRequest</span>
+        (SERVICE) or an
+        <span class="mono">Order</span>
+        (ORDER); a review's target is polymorphic — a service center, a supplier or a product. The
+        <span class="mono">MaintenanceRecord</span>
+        ,
+        <span class="mono">OrderItem</span>
+        ,
+        <span class="mono">Payment</span>
+        ,
+        <span class="mono">Conversation</span>
+        ,
+        <span class="mono">Message</span>
+        ,
+        <span class="mono">Notification</span>
+        and the TTL-swept
+        <span class="mono">RateLimit</span>
+        collections complete the model.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>What the database guarantees, not the code</h2>
+      <p>
+        A check in a service is a rule the next request can interleave; an index is the one it cannot. The guarantees that matter here are writes.
+      </p>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Guarantee</th>
+            <th>Enforced by</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Money never drifts</td>
+            <td>
+              Every price, cost, fee and total is an integer count of minor units — never a float.
+              <strong>Floating-point money is a bug with a delay on it.</strong>
+            </td>
+          </tr>
+          <tr>
+            <td>A booking and an order move only along legal transitions</td>
+            <td>
+              <span class="mono">accept / decline / start / complete / cancel</span>
+              are action methods behind a legal-transition guard — there is no raw status write to smuggle a booking from
+              <span class="mono">PENDING</span>
+              to
+              <span class="mono">COMPLETED</span>
+              .
+            </td>
+          </tr>
+          <tr>
+            <td>Exactly one super-admin exists</td>
+            <td>
+              A partial unique index over
+              <span class="mono">{ role: 'super-admin' }</span>
+              permits a single row — seeded once, never created through a screen, immutable even to itself.
+            </td>
+          </tr>
+          <tr>
+            <td>The last unit of stock sells once</td>
+            <td>
+              <span class="mono">OrderService</span>
+              decrements stock atomically against the ceiling; the oversell matches nothing and the order is refused — the same shape that mints
+              tickets once in the sibling platform.
+            </td>
+          </tr>
+          <tr>
+            <td>A VIN, a registration and a SKU are unique</td>
+            <td>Unique indexes reject the duplicate at write time — not after a read-then-write race the next request can interleave.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The repository</h2>
+      <p>
+        Every folder exposes a barrel
+        <code>index.ts</code>
+        , and one type lives in one file. Imports go through the barrel — except inside a use-client graph and in the models, which reach for their
+        constants directly.
+      </p>
+    </div>
+
+    <pre class="tree">
+<b>app/</b>
+  <b>(marketing)/</b>      <span>landing — hero, roles, features, roadmap</span>
+  <b>(auth)/</b>           <span>sign-in · register/{owner,center,supplier} · verify-email</span>
+  <b>(dashboard)/</b>      <span>the guard — owner · center · supplier · admin areas</span>
+  <b>api/</b>              <span>same-origin route handlers — uploads · message send</span>
+  <span>robots.ts · sitemap.ts · llms.txt · opengraph-image · globals.css</span>
+<b>proxy.ts</b>           <span>same-origin API perimeter + route guard — Next 16's middleware</span>
+<b>components/</b>
+  <b>owner/ center/ supplier/ admin/ auth/</b>   <span>one area per folder</span>
+  <b>vehicles/ scheduling/ bookings/ marketplace/ messages/</b>  <span>feature modules</span>
+  <b>dashboard/ shared/ ui/</b>   <span>chrome · cross-cutting · Base UI primitives</span>
+<b>constants/</b>         <span>app-data · roles · rate-limit · error codes · datetime · database</span>
+<b>env/</b>               <span>zod-validated server &amp; client env — invalid env fails the build</span>
+<b>lib/</b>
+  <b>result/</b>          <span>SingleResult · ListResult · EmptyResult and their factories</span>
+  <b>auth/</b>            <span>jose session · guards · admin-area gate</span>
+  <b>services/</b>        <span>one class per entity — the only place business rules live</span>
+  <b>schemas/ storage/ mail/ api/</b>   <span>zod · GridFS · nodemailer · response helpers</span>
+  <span>logger.ts · mongodb.ts · utils/ — pino · cached connection · money &amp; tokens</span>
+<b>models/</b>            <span>Mongoose documents, one per file (guarded re-registration)</span>
+<b>types/</b>             <span>one type per file; {entity}.dto.ts holds the DTO + its mapper</span>
+<b>scripts/</b>           <span>seed:super-admin · seed:demo · send:reminders · verify:*</span>
+<b>docs/</b>              <span>IMPLEMENTATION-PLAN.md · DEPLOYMENT.md · this page</span></pre>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Build progress</h2>
+      <p>
+        Twenty-one steps, each self-contained and each ending on a green lint, format and build. Nothing is built yet — the repository ships as
+        scaffold and plan, and every step below is planned.
+      </p>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 1–2 · Requirements &amp; system design</div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-n">00</span>
+          <span class="step-name">Project scaffold</span>
+          <span class="status">Planned</span>
+          <span class="step-note">
+            Toolchain, design tokens (indigo + four role accents), landing page, cached Mongoose connection, PM2 on port 3104.
+          </span>
+        </div>
+        <div class="step">
+          <span class="step-n">01</span>
+          <span class="step-name">Foundations</span>
+          <span class="status">Planned</span>
+          <span class="step-note">
+            Validated env, Result pattern, API responses, pino logger, money-in-minor-units utils, 5-digit error-code registry.
+          </span>
+        </div>
+        <div class="step">
+          <span class="step-n">02</span>
+          <span class="step-name">SEO, structured data &amp; llms.txt</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">03</span>
+          <span class="step-name">Data model</span>
+          <span class="status">Planned</span>
+          <span class="step-note">Every collection, DTO mappers, the single-super-admin and unique vin / registration / sku indexes.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 3 · Backend — accounts, vehicles, scheduling, bookings</div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-n">04</span>
+          <span class="step-name">Authentication</span>
+          <span class="status">Planned</span>
+          <span class="step-note">jose HS256 session, revocation re-checked each request, fail-closed for privileged roles on a DB outage.</span>
+        </div>
+        <div class="step">
+          <span class="step-n">05</span>
+          <span class="step-name">Dashboard shell &amp; RBAC</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">06</span>
+          <span class="step-name">Accounts: registration, verification &amp; approval</span>
+          <span class="status">Planned</span>
+          <span class="step-note">Owners usable on email verification; centers and suppliers transactable only after admin verification.</span>
+        </div>
+        <div class="step">
+          <span class="step-n">07</span>
+          <span class="step-name">Vehicle records</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">08</span>
+          <span class="step-name">Maintenance scheduler &amp; reminders</span>
+          <span class="status">Planned</span>
+          <span class="step-note">
+            The flagship — computeDue advances UPCOMING → DUE → OVERDUE and the send:reminders worker files a Notification before the date passes.
+          </span>
+        </div>
+        <div class="step">
+          <span class="step-n">09</span>
+          <span class="step-name">Service booking</span>
+          <span class="status">Planned</span>
+          <span class="step-note">A booking walks legal transitions only; a raw status write does not exist.</span>
+        </div>
+        <div class="step">
+          <span class="step-n">10</span>
+          <span class="step-name">Service-center operations</span>
+          <span class="status">Planned</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 4 · Marketplace &amp; billing</div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-n">11</span>
+          <span class="step-name">Marketplace: suppliers &amp; products</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">12</span>
+          <span class="step-name">Orders &amp; fulfillment</span>
+          <span class="status">Planned</span>
+          <span class="step-note">Atomic stock decrement with a per-item price snapshot — the last unit sells once.</span>
+        </div>
+        <div class="step">
+          <span class="step-n">13</span>
+          <span class="step-name">Invoices &amp; payments</span>
+          <span class="status">Planned</span>
+          <span class="step-note">SERVICE and ORDER invoices; money is integer minor units end to end.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 5 · Communication &amp; insight</div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-n">14</span>
+          <span class="step-name">Messaging</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">15</span>
+          <span class="step-name">Notifications</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">16</span>
+          <span class="step-name">Reviews &amp; ratings</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">17</span>
+          <span class="step-name">Reports &amp; analytics</span>
+          <span class="status">Planned</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div class="phase-label">Phase 6–8 · Hardening, testing &amp; deployment</div>
+      <div class="steps">
+        <div class="step">
+          <span class="step-n">18</span>
+          <span class="step-name">Hardening</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">19</span>
+          <span class="step-name">Polish</span>
+          <span class="status">Planned</span>
+        </div>
+        <div class="step">
+          <span class="step-n">20</span>
+          <span class="step-name">Testing &amp; deployment</span>
+          <span class="status">Planned</span>
+          <span class="step-note">Vitest units, the verify:* harnesses, two PM2 apps — the web app and the reminder cron — behind nginx.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>
+      This snapshot shows all twenty-one steps as planned; the per-step statuses above are hand-set and are not regenerated automatically. The
+      authoritative plan — per-step deliverables, acceptance criteria and every deviation taken — lives in
+      <code>docs/IMPLEMENTATION-PLAN.md</code>
+      .
+    </p>
+  </footer>
+</div>

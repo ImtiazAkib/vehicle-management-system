@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+/*
+  Step 0 pulls in Tailwind and nothing else. The design tokens — the `@theme` block with the primary
+  and role-accent colors, the light/dark palette and the typography helpers — land in step 1.
+*/

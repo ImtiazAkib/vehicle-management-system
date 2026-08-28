@@ -1,0 +1,13 @@
+# --------------------------
+# TEST + TYPE CHECK + BUILD
+# --------------------------
+#
+# `lint` and `format` already ran on every commit. The unit tests are quick and catch a
+# broken session-token round-trip before the build; the build is what catches type errors, a
+# broken metadata route or a bad env schema — all cheap here, expensive after CI or a pull.
+
+echo "Running unit tests before push..."
+npm run test
+
+echo "Running production build before push..."
+npm run build
