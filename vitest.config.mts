@@ -16,6 +16,9 @@ export default defineConfig({
   test: {
     environment: 'node',
     include: ['**/*.test.ts'],
+    // The suite is grown step by step. An empty run is a pass so the pre-push hook (and CI) do not
+    // block a push before the first test file lands — the pure-core tests arrive from step 1 on.
+    passWithNoTests: true,
     env: {
       MONGODB_URI: 'mongodb://127.0.0.1:27017/vehicle-utilities-test',
       AUTH_SECRET: 'test-only-auth-secret-at-least-32-characters-long',
