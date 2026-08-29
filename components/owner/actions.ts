@@ -7,10 +7,11 @@ import { USER_ROLES } from '@/constants/roles.const';
 import { ROUTES } from '@/constants/routes.const';
 
 import { getSessionUser } from '@/lib/auth';
-import { VehicleCreateSchema } from '@/lib/schemas';
-import { VehicleService } from '@/lib/services';
+import { MaintenanceScheduleCreateSchema, VehicleCreateSchema } from '@/lib/schemas';
+import { MaintenanceService, VehicleService } from '@/lib/services';
 
 const vehicleService = new VehicleService();
+const maintenanceService = new MaintenanceService();
 
 export type FormState = {
   error: string | null;
@@ -71,4 +72,51 @@ export async function deleteVehicleAction(formData: FormData): Promise<void> {
   }
 
   revalidatePath(ROUTES.OWNER_VEHICLES.HREF);
+}
+
+/** Add a maintenance schedule to one of the owner's vehicles. */
+export async function createScheduleAction(_previous: FormState, formData: FormData): Promise<FormState> {
+  const owner = await requireOwner();
+
+  if (!owner) {
+    return { error: 'You must be signed in as a vehicle owner.' };
+  }
+
+  const parsed = MaintenanceScheduleCreateSchema.safeParse({
+    vehicleId: formData.get('vehicleId'),
+    serviceType: formData.get('serviceType'),
+    intervalMonths: formData.get('intervalMonths') ?? '',
+    intervalMileage: formData.get('intervalMileage') ?? '',
+    nextDueDate: formData.get('nextDueDate'),
+    nextDueMileage: formData.get('nextDueMileage') ?? '',
+  });
+
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Check the form and try again.' };
+  }
+
+  const result = await maintenanceService.create(owner.userId, parsed.data);
+
+  if (!result.success) {
+    return { error: result.errors[0]?.error ?? 'Could not add the schedule.' };
+  }
+
+  redirect(ROUTES.OWNER_SCHEDULES.HREF);
+}
+
+/** Remove one of the signed-in owner's schedules. */
+export async function deleteScheduleAction(formData: FormData): Promise<void> {
+  const owner = await requireOwner();
+
+  if (!owner) {
+    return;
+  }
+
+  const scheduleId = formData.get('scheduleId');
+
+  if (typeof scheduleId === 'string' && scheduleId) {
+    await maintenanceService.remove(owner.userId, scheduleId);
+  }
+
+  revalidatePath(ROUTES.OWNER_SCHEDULES.HREF);
 }

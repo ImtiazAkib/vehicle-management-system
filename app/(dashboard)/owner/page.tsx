@@ -5,6 +5,11 @@ import { ROUTES } from '@/constants/routes.const';
 
 import { requireRole } from '@/lib/auth';
 
+const LINKS = [
+  { href: ROUTES.OWNER_VEHICLES.HREF, title: 'My vehicles', summary: 'Register a vehicle and track its details.' },
+  { href: ROUTES.OWNER_SCHEDULES.HREF, title: 'Maintenance', summary: 'Set schedules and get reminders before a service falls due.' },
+] as const;
+
 export default async function OwnerHomePage() {
   const user = await requireRole(USER_ROLES.OWNER);
 
@@ -16,10 +21,12 @@ export default async function OwnerHomePage() {
       </div>
 
       <div className="grid gap-2 sm:grid-cols-2">
-        <Link href={ROUTES.OWNER_VEHICLES.HREF} className="border-border hover:bg-muted flex flex-col gap-0.5 rounded-md border p-4">
-          <span className="text-sm font-semibold">My vehicles</span>
-          <span className="text-muted-foreground text-sm">Register a vehicle and track its details.</span>
-        </Link>
+        {LINKS.map(link => (
+          <Link key={link.href} href={link.href} className="border-border hover:bg-muted flex flex-col gap-0.5 rounded-md border p-4">
+            <span className="text-sm font-semibold">{link.title}</span>
+            <span className="text-muted-foreground text-sm">{link.summary}</span>
+          </Link>
+        ))}
       </div>
     </section>
   );

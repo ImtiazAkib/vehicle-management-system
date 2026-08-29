@@ -38,6 +38,8 @@ export const ROUTES = {
   OWNER: { LABEL: 'My vehicles', HREF: '/owner' },
   OWNER_VEHICLES: { LABEL: 'Vehicles', HREF: '/owner/vehicles' },
   OWNER_VEHICLES_NEW: { LABEL: 'Add a vehicle', HREF: '/owner/vehicles/new' },
+  OWNER_SCHEDULES: { LABEL: 'Maintenance', HREF: '/owner/schedules' },
+  OWNER_SCHEDULES_NEW: { LABEL: 'Add a schedule', HREF: '/owner/schedules/new' },
   CENTER: { LABEL: 'Service center', HREF: '/center' },
   SUPPLIER: { LABEL: 'Supplier', HREF: '/supplier' },
   PROFILE: { LABEL: 'Profile', HREF: '/profile' },

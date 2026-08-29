@@ -776,7 +776,7 @@ scripts/verify-vehicles.ts                 verify:vehicles — unique constraint
 
 <a id="step-8"></a>
 
-### Step 8 - Maintenance scheduler & reminders
+### Step 8 - Maintenance scheduler & reminders ✅ Done
 
 **Goal.** Automated maintenance tracking with a reminder cron — the promise the product is built on. An owner sets a
 time- and/or mileage-based schedule per vehicle; a separate worker sweeps for what has fallen due and enqueues a
