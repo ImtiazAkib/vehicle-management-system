@@ -15,6 +15,7 @@ const LINKS = [
   { href: ROUTES.CENTER_REQUESTS.HREF, title: 'Service requests', summary: 'Accept, schedule, start and complete your bookings.' },
   { href: ROUTES.CENTER_RECORDS.HREF, title: 'Records', summary: 'The maintenance work your center has logged.' },
   { href: ROUTES.CENTER_INVOICES.HREF, title: 'Invoices', summary: 'Bill completed bookings and track what is owed.' },
+  { href: ROUTES.CENTER_MESSAGES.HREF, title: 'Messages', summary: 'Talk to owners about their bookings.' },
   { href: ROUTES.CENTER_PROFILE.HREF, title: 'Center profile', summary: 'The details owners see when booking you.' },
 ] as const;
 

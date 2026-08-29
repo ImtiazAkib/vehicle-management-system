@@ -8,6 +8,7 @@
 export * from './booking-transition.utils';
 export * from './caller.utils';
 export * from './class-name.utils';
+export * from './conversation-access.utils';
 export * from './llms.utils';
 export * from './money.utils';
 export * from './mongo.utils';

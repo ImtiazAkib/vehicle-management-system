@@ -7,6 +7,7 @@ import {
   Car,
   ClipboardList,
   Home,
+  MessageSquare,
   Package,
   ReceiptText,
   ShieldCheck,
@@ -38,6 +39,7 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
     { label: ROUTES.OWNER_MARKETPLACE.LABEL, href: ROUTES.OWNER_MARKETPLACE.HREF, icon: ShoppingCart },
     { label: ROUTES.OWNER_ORDERS.LABEL, href: ROUTES.OWNER_ORDERS.HREF, icon: ShoppingBag },
     { label: ROUTES.OWNER_INVOICES.LABEL, href: ROUTES.OWNER_INVOICES.HREF, icon: ReceiptText },
+    { label: ROUTES.OWNER_MESSAGES.LABEL, href: ROUTES.OWNER_MESSAGES.HREF, icon: MessageSquare },
   ],
   supplier: [
     { label: ROUTES.SUPPLIER_PRODUCTS.LABEL, href: ROUTES.SUPPLIER_PRODUCTS.HREF, icon: Package },
@@ -49,6 +51,7 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
     { label: ROUTES.CENTER_REQUESTS.LABEL, href: ROUTES.CENTER_REQUESTS.HREF, icon: ClipboardList },
     { label: ROUTES.CENTER_RECORDS.LABEL, href: ROUTES.CENTER_RECORDS.HREF, icon: Wrench },
     { label: ROUTES.CENTER_INVOICES.LABEL, href: ROUTES.CENTER_INVOICES.HREF, icon: ReceiptText },
+    { label: ROUTES.CENTER_MESSAGES.LABEL, href: ROUTES.CENTER_MESSAGES.HREF, icon: MessageSquare },
     { label: ROUTES.CENTER_PROFILE.LABEL, href: ROUTES.CENTER_PROFILE.HREF, icon: Store },
   ],
   admin: [

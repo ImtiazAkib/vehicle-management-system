@@ -49,7 +49,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ✅ Done        |
 | [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ✅ Done        |
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ✅ Done        |
-| [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ⬜ Not started |
+| [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ✅ Done        |
 | [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ⬜ Not started |
@@ -1194,7 +1194,7 @@ The step is done when:
 
 <a id="step-14"></a>
 
-### Step 14 - Messaging
+### Step 14 - Messaging ✅ Done
 
 **Goal.** A place for an owner and a service center to talk in the context of the work itself — a booking they both
 see — so a question about a service request does not leave the platform for a phone call nobody logged. This step

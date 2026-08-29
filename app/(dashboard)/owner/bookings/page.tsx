@@ -11,6 +11,7 @@ import { ServiceRequestService } from '@/lib/services';
 import { formatPriceLabel } from '@/lib/utils';
 
 import { TransitionButton } from '@/components/bookings';
+import { startConversationAction } from '@/components/messages/actions';
 import { EmptyState, PageHeader } from '@/components/shared';
 
 const service = new ServiceRequestService();
@@ -65,7 +66,15 @@ export default async function OwnerBookingsPage() {
                       : ''}
                 </p>
               </div>
-              {CANCELLABLE.includes(booking.status) && <TransitionButton requestId={booking.serviceRequestId} action="cancel" label="Cancel" />}
+              <div className="flex items-center gap-2">
+                <form action={startConversationAction}>
+                  <input type="hidden" name="serviceRequestId" value={booking.serviceRequestId} />
+                  <button type="submit" className="border-border hover:bg-muted rounded-md border px-2 py-1 text-xs font-medium transition-colors">
+                    Message
+                  </button>
+                </form>
+                {CANCELLABLE.includes(booking.status) && <TransitionButton requestId={booking.serviceRequestId} action="cancel" label="Cancel" />}
+              </div>
             </li>
           ))}
         </ul>
