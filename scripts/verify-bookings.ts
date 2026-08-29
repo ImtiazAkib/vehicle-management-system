@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+import { MaintenanceRecord } from '@/models/maintenance-record.model';
 import { ServiceCenterProfile } from '@/models/service-center-profile.model';
 import { ServiceRequest } from '@/models/service-request.model';
 import { User } from '@/models/user.model';
@@ -129,17 +130,36 @@ async function run(): Promise<void> {
     expectFailure(lateCancel, BUSINESS.ILLEGAL_TRANSITION.CODE, 'an owner cannot cancel once work is in progress');
 
     // 4. A center may not transition a booking assigned to a different center.
-    const foreign = await service.transition(centerBId, { action: 'complete', serviceRequestId: bookingId, finalCost: 600000 });
+    const foreign = await service.transition(centerBId, {
+      action: 'complete',
+      serviceRequestId: bookingId,
+      finalCost: 600000,
+      mileageAtService: 5000,
+    });
     expectFailure(foreign, BUSINESS.NOT_ASSIGNED_CENTER.CODE, "a center cannot transition another center's booking");
 
     const completed = expectSuccess(
-      await service.transition(centerAId, { action: 'complete', serviceRequestId: bookingId, finalCost: 600000 }),
+      await service.transition(centerAId, { action: 'complete', serviceRequestId: bookingId, finalCost: 600000, mileageAtService: 5000 }),
       'complete'
     );
     if (completed.status !== SERVICE_REQUEST_STATUSES.COMPLETED || completed.finalCost !== 600000) {
       throw new Error('complete must record the final cost and move to COMPLETED');
     }
     pass('complete records the final cost and moves to COMPLETED');
+
+    // Completion writes exactly one durable record tied to the booking, at the recorded mileage.
+    const records = await MaintenanceRecord.find({ serviceRequest: bookingId }).lean();
+    if (records.length !== 1 || records[0]?.mileageAtService !== 5000 || records[0]?.cost !== 600000) {
+      throw new Error(`completion must write exactly one record at the recorded mileage — found ${records.length}`);
+    }
+    pass('completion writes exactly one maintenance record tied to the booking');
+
+    // The vehicle's odometer advances to the higher recorded mileage.
+    const refreshed = await Vehicle.findById(vehicle._id).lean();
+    if (refreshed?.currentMileage !== 5000) {
+      throw new Error(`completion must advance the vehicle mileage to 5000 but it was ${refreshed?.currentMileage}`);
+    }
+    pass('completion advances the vehicle odometer to the recorded mileage');
 
     // 5. A declined booking is terminal — every further transition is refused.
     const second = expectSuccess(await service.create(ownerId, { ...baseBooking, serviceCenterId: toId(profileA._id) }), 'create second booking');
@@ -162,6 +182,7 @@ async function run(): Promise<void> {
 
     console.log(`\nAll ${checks} checks passed.`);
   } finally {
+    await MaintenanceRecord.deleteMany({ vehicle: vehicle._id });
     await ServiceRequest.deleteMany({ owner: owner._id });
     await Vehicle.deleteMany({ _id: vehicle._id });
     await ServiceCenterProfile.deleteMany({ _id: { $in: [profileA._id, profileB._id, profileC._id] } });

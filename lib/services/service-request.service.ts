@@ -15,6 +15,8 @@ import type { ErrorDto } from '@/lib/result';
 import type { BookingCreateOutput, BookingTransitionOutput } from '@/lib/schemas';
 import { BOOKING_ACTION_ACTORS, canTransition, toId } from '@/lib/utils';
 
+import { MaintenanceService } from './maintenance.service';
+
 import type { ServiceCenterProfileEntity } from '@/models/service-center-profile.model';
 import type { ServiceRequestEntity } from '@/models/service-request.model';
 import type { VehicleEntity } from '@/models/vehicle.model';
@@ -31,6 +33,8 @@ const BUSINESS = CODES.BUSINESS.BOOKINGS;
  * legal and refuses otherwise. Owner-facing and center-facing reads are each scoped to the requester.
  */
 export class ServiceRequestService {
+  private readonly maintenance = new MaintenanceService();
+
   /**
    * An owner's bookings across all their vehicles, newest first.
    *
@@ -189,6 +193,19 @@ export class ServiceRequestService {
 
       if (input.action === 'complete') {
         request.finalCost = input.finalCost;
+
+        // Write the durable maintenance record before the status is persisted, so a completed booking
+        // always has exactly one record — a later save failure leaves the booking IN_PROGRESS to retry.
+        await this.maintenance.recordCompletion({
+          vehicleId: request.vehicle,
+          serviceRequestId: request._id,
+          serviceCenterId: request.serviceCenter,
+          serviceType: request.serviceType,
+          cost: input.finalCost,
+          mileageAtService: input.mileageAtService,
+          notes: input.notes,
+          performedOn: new Date(),
+        });
       }
 
       request.status = next;

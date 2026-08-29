@@ -43,7 +43,7 @@ export function AcceptForm({ requestId }: { requestId: string }) {
   );
 }
 
-/** Completing a booking commits the final cost. */
+/** Completing a booking commits the final cost and the facts of the maintenance record it writes. */
 export function CompleteForm({ requestId }: { requestId: string }) {
   return (
     <form action={transitionBookingAction} className="flex flex-wrap items-end gap-2">
@@ -52,6 +52,14 @@ export function CompleteForm({ requestId }: { requestId: string }) {
       <label className="flex flex-col gap-1 text-xs font-medium">
         Final cost ({APP_DATA.CURRENCY.SYMBOL})
         <input type="text" name="finalCost" inputMode="decimal" placeholder="0.00" required className={inputClassName} />
+      </label>
+      <label className="flex flex-col gap-1 text-xs font-medium">
+        Mileage at service
+        <input type="number" name="mileageAtService" inputMode="numeric" placeholder="0" required className={inputClassName} />
+      </label>
+      <label className="flex flex-col gap-1 text-xs font-medium">
+        Notes (optional)
+        <input type="text" name="notes" className={inputClassName} />
       </label>
       <button type="submit" className={primaryButtonClassName}>
         Mark complete

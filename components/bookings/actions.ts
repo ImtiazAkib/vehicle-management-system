@@ -64,6 +64,8 @@ export async function transitionBookingAction(formData: FormData): Promise<void>
     scheduledDate: formData.get('scheduledDate') ?? undefined,
     estimatedCost: formData.get('estimatedCost') ?? undefined,
     finalCost: formData.get('finalCost') ?? undefined,
+    mileageAtService: formData.get('mileageAtService') ?? undefined,
+    notes: formData.get('notes') ?? undefined,
   });
 
   if (!parsed.success) {

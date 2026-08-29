@@ -918,7 +918,7 @@ scripts/verify-bookings.ts                 verify:bookings
 
 <a id="step-10"></a>
 
-### Step 10 - Service-center operations
+### Step 10 - Service-center operations ✅ Done
 
 **Goal.** The service-center side of a booking, carried through to a durable maintenance record and a SERVICE invoice. A
 center manages its own profile, works the requests assigned to it, records what was actually done, and bills for it — and

@@ -2,7 +2,7 @@ import type { Route } from 'next';
 
 import Link from 'next/link';
 
-import { CalendarCheck, Car, ClipboardList, Home, ShieldCheck, User as UserIcon, Users, Wrench } from 'lucide-react';
+import { CalendarCheck, Car, ClipboardList, Home, ReceiptText, ShieldCheck, Store, User as UserIcon, Users, Wrench } from 'lucide-react';
 
 import { UserRole } from '@/types';
 
@@ -22,7 +22,12 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
     { label: ROUTES.OWNER_SCHEDULES.LABEL, href: ROUTES.OWNER_SCHEDULES.HREF, icon: Wrench },
     { label: ROUTES.OWNER_BOOKINGS.LABEL, href: ROUTES.OWNER_BOOKINGS.HREF, icon: CalendarCheck },
   ],
-  'service-center': [{ label: ROUTES.CENTER_REQUESTS.LABEL, href: ROUTES.CENTER_REQUESTS.HREF, icon: ClipboardList }],
+  'service-center': [
+    { label: ROUTES.CENTER_REQUESTS.LABEL, href: ROUTES.CENTER_REQUESTS.HREF, icon: ClipboardList },
+    { label: ROUTES.CENTER_RECORDS.LABEL, href: ROUTES.CENTER_RECORDS.HREF, icon: Wrench },
+    { label: ROUTES.CENTER_INVOICES.LABEL, href: ROUTES.CENTER_INVOICES.HREF, icon: ReceiptText },
+    { label: ROUTES.CENTER_PROFILE.LABEL, href: ROUTES.CENTER_PROFILE.HREF, icon: Store },
+  ],
   admin: [
     { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
     { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },

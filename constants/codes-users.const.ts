@@ -3,11 +3,13 @@ const createErrorDefinition = (code: number, message: string) => ({ CODE: code, 
 /** Users/accounts — database layer (11xxx). */
 export const USERS_DATABASE = {
   UPDATE_FAILED: createErrorDefinition(11100, 'Could not update the account. Try again.'),
+  READ_FAILED: createErrorDefinition(11101, 'Could not load the profile. Try again.'),
 } as const;
 
 /** Users/accounts — validation layer (21xxx). */
 export const USERS_VALIDATION = {
   INVALID_OR_EXPIRED_TOKEN: createErrorDefinition(21100, 'This link is invalid or has expired. Request a new one.'),
+  PROFILE_NOT_FOUND: createErrorDefinition(21101, 'Profile not found.'),
 } as const;
 
 /** Users/accounts — business layer (31xxx). */

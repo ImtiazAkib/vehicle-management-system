@@ -1,3 +1,6 @@
+import { Types } from 'mongoose';
+
+import { MaintenanceRecord } from '@/models/maintenance-record.model';
 import { MaintenanceSchedule } from '@/models/maintenance-schedule.model';
 import { Notification } from '@/models/notification.model';
 import { Vehicle } from '@/models/vehicle.model';
@@ -33,6 +36,18 @@ const VALIDATION = CODES.VALIDATION.SCHEDULING;
 
 /** How long a schedule that is still due waits before it reminds again, so a standing overdue does not mail every hour. */
 const RENOTIFY_AFTER_MS = 24 * 60 * 60 * 1000;
+
+/** The facts a completed booking hands to its durable maintenance record. */
+export type RecordCompletionInput = {
+  vehicleId: Types.ObjectId;
+  serviceRequestId: Types.ObjectId;
+  serviceCenterId: Types.ObjectId;
+  serviceType: string;
+  cost: number;
+  mileageAtService: number;
+  notes?: string;
+  performedOn: Date;
+};
 
 /**
  * Maintenance schedules and the reminder sweep. Owner-facing methods are scoped to the owner's vehicles;
@@ -131,6 +146,60 @@ export class MaintenanceService {
       log.error({ err: error }, 'Removing a schedule failed');
 
       return emptyFailureWithError(createError(DATABASE.WRITE_FAILED.CODE, DATABASE.WRITE_FAILED.MESSAGE));
+    }
+  }
+
+  /**
+   * Write the durable maintenance record for a completed booking, and let the completion ripple outward:
+   * the vehicle's odometer advances when the recorded mileage is higher, and a matching open schedule
+   * rolls to its next interval and flips back to UPCOMING — the reminder that fired is the reminder that
+   * gets retired.
+   *
+   * A booking ends; this record is the vehicle's permanent service log, so it is kept even after the
+   * booking is archived. Reached from the center's `complete` transition, once per booking.
+   *
+   * @param input - The completed booking's facts and the mileage at service.
+   */
+  public async recordCompletion(input: RecordCompletionInput): Promise<void> {
+    await connectToDatabase();
+
+    await MaintenanceRecord.create({
+      vehicle: input.vehicleId,
+      serviceRequest: input.serviceRequestId,
+      serviceCenter: input.serviceCenterId,
+      serviceType: input.serviceType,
+      mileageAtService: input.mileageAtService,
+      cost: input.cost,
+      performedOn: input.performedOn,
+      notes: input.notes,
+    });
+
+    // Keep the scheduler's odometer input current without the owner re-typing it — but never move it backward.
+    await Vehicle.updateOne(
+      { _id: input.vehicleId, currentMileage: { $lt: input.mileageAtService } },
+      { $set: { currentMileage: input.mileageAtService } }
+    );
+
+    const schedule = await MaintenanceSchedule.findOne({
+      vehicle: input.vehicleId,
+      serviceType: input.serviceType,
+      status: { $ne: MAINTENANCE_SCHEDULE_STATUSES.COMPLETED },
+    });
+
+    if (schedule) {
+      if (schedule.intervalMonths) {
+        const nextDue = new Date(schedule.nextDueDate);
+        nextDue.setMonth(nextDue.getMonth() + schedule.intervalMonths);
+        schedule.nextDueDate = nextDue;
+      }
+
+      if (schedule.intervalMileage) {
+        schedule.nextDueMileage = input.mileageAtService + schedule.intervalMileage;
+      }
+
+      schedule.status = MAINTENANCE_SCHEDULE_STATUSES.UPCOMING;
+      schedule.set({ lastNotifiedAt: undefined });
+      await schedule.save();
     }
   }
 

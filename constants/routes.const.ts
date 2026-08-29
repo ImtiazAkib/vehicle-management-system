@@ -44,6 +44,9 @@ export const ROUTES = {
   OWNER_BOOKINGS_NEW: { LABEL: 'Book a service', HREF: '/owner/bookings/new' },
   CENTER: { LABEL: 'Service center', HREF: '/center' },
   CENTER_REQUESTS: { LABEL: 'Service requests', HREF: '/center/requests' },
+  CENTER_RECORDS: { LABEL: 'Records', HREF: '/center/records' },
+  CENTER_INVOICES: { LABEL: 'Invoices', HREF: '/center/invoices' },
+  CENTER_PROFILE: { LABEL: 'Center profile', HREF: '/center/profile' },
   SUPPLIER: { LABEL: 'Supplier', HREF: '/supplier' },
   PROFILE: { LABEL: 'Profile', HREF: '/profile' },
 } as const;
