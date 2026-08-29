@@ -1,12 +1,13 @@
 import type { ReactNode } from 'react';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { Inter, Poppins } from 'next/font/google';
 
-import { APP_DATA } from '@/constants/app-data.const';
+import { APP_DATA, SEO } from '@/constants';
+import { env } from '@/env/server';
 
-import { cn } from '@/lib/utils';
+import { buildAbsoluteUrl, cn } from '@/lib/utils';
 
 import './globals.css';
 
@@ -22,13 +23,48 @@ const poppins = Poppins({
 });
 
 /*
-  Static metadata is enough for now. The `metadataBase`, canonical link, OpenGraph card and the
-  `ROBOTS_ENABLED` indexing gate are wired in step 2 once the SEO constants exist.
+  Static rather than `generateMetadata`: with one language and no dynamic segment there is nothing to
+  await. `metadataBase` is what makes the canonical link, the OG URL and the social card resolve as
+  absolute instead of silently rendering relative. Indexing follows the same `ROBOTS_ENABLED` gate as
+  `robots.txt`, so a deployment that has not opted in says `noindex` twice.
 */
 export const metadata: Metadata = {
+  metadataBase: new URL(env.APP_BASE_URL),
   title: APP_DATA.NAME,
   description: APP_DATA.DESCRIPTION,
   applicationName: APP_DATA.SHORT_NAME,
+  keywords: [...SEO.KEYWORDS],
+  authors: [{ name: APP_DATA.NAME }],
+  alternates: {
+    canonical: buildAbsoluteUrl(env.APP_BASE_URL),
+  },
+  openGraph: {
+    type: 'website',
+    siteName: APP_DATA.SHORT_NAME,
+    url: buildAbsoluteUrl(env.APP_BASE_URL),
+    title: APP_DATA.NAME,
+    description: APP_DATA.DESCRIPTION,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: APP_DATA.NAME,
+    description: APP_DATA.DESCRIPTION,
+  },
+  robots: {
+    index: env.ROBOTS_ENABLED,
+    follow: env.ROBOTS_ENABLED,
+  },
+};
+
+/*
+  Browser-chrome color, matched to the app background in each scheme — the sRGB of `--background` light
+  and dark, so a mobile address bar meets the page seamlessly.
+*/
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f7fbfc' },
+    { media: '(prefers-color-scheme: dark)', color: '#0b0e11' },
+  ],
 };
 
 type RootLayoutProps = {
@@ -41,8 +77,7 @@ type RootLayoutProps = {
   land in later steps.
 
   The font variables sit on `<html>`: `--font-body` resolves to `--font-inter` and `--font-display` to
-  `--font-poppins` in `globals.css`, and a custom property resolves against the element that declares it,
-  so the faces must be declared at the same level the tokens read them.
+  `--font-poppins` in `globals.css`, and a custom property resolves against the element that declares it.
 */
 export default function RootLayout({ children }: RootLayoutProps) {
   return (

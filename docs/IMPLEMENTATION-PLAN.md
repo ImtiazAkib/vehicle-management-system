@@ -36,7 +36,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | -------------- | ----------------------------------------------- | ------------------------------------------- | -------------- |
 | [0](#step-0)   | Project scaffold                                | Foundation & tooling                        | ✅ Done        |
 | [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done        |
-| [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ⬜ Not started |
+| [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done        |
 | [3](#step-3)   | Data model                                      | Domain model & authentication               | ⬜ Not started |
 | [4](#step-4)   | Authentication                                  | Domain model & authentication               | ⬜ Not started |
 | [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ⬜ Not started |
@@ -327,7 +327,7 @@ Design      app/globals.css (light default + full .dark block; primary indigo, r
 
 <a id="step-2"></a>
 
-### Step 2 — SEO, structured data and llms.txt
+### Step 2 — SEO, structured data and llms.txt ✅ Done
 
 **Goal.** The crawler and machine-readable surface, all of it derived from a single validated `APP_BASE_URL`.
 This step makes the public landing page legible to search engines, social cards and LLM crawlers, and — just
