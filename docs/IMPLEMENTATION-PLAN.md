@@ -51,7 +51,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ✅ Done        |
 | [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ✅ Done        |
 | [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ✅ Done        |
-| [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ⬜ Not started |
+| [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ✅ Done        |
 | [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ⬜ Not started |
 | [19](#step-19) | Polish                                          | Hardening, polish & release                 | ⬜ Not started |
@@ -1325,7 +1325,7 @@ The step is done when:
 
 <a id="step-16"></a>
 
-### Step 16 - Reviews & ratings
+### Step 16 - Reviews & ratings ✅ Done
 
 **Goal.** Owner-authored reviews of the parties an owner actually transacts with — a service center, a supplier, or a
 product — with the target's running rating recomputed in the same breath as the review is written. This step delivers

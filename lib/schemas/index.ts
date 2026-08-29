@@ -20,3 +20,4 @@ export * from './order-invoice.schema';
 export * from './payment-record.schema';
 export * from './conversation-start.schema';
 export * from './message-send.schema';
+export * from './review-create.schema';

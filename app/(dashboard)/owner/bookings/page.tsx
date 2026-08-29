@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { CalendarCheck } from 'lucide-react';
 
-import { SERVICE_REQUEST_STATUSES } from '@/constants/enums.const';
+import { REVIEW_TARGET_TYPES, SERVICE_REQUEST_STATUSES } from '@/constants/enums.const';
 import { USER_ROLES } from '@/constants/roles.const';
 import { ROUTES } from '@/constants/routes.const';
 
@@ -12,6 +12,7 @@ import { formatPriceLabel } from '@/lib/utils';
 
 import { TransitionButton } from '@/components/bookings';
 import { startConversationAction } from '@/components/messages/actions';
+import { ReviewForm } from '@/components/reviews';
 import { EmptyState, PageHeader } from '@/components/shared';
 
 const service = new ServiceRequestService();
@@ -52,29 +53,37 @@ export default async function OwnerBookingsPage() {
       ) : (
         <ul className="flex flex-col gap-2">
           {bookings.map(booking => (
-            <li key={booking.serviceRequestId} className="surface-card flex items-center justify-between gap-4 p-4">
-              <div>
-                <p className="font-medium">{booking.serviceType}</p>
-                <p className="text-muted-foreground text-sm">
-                  {booking.status.toLowerCase().replace('_', ' ')} · {booking.priority.toLowerCase()} · preferred{' '}
-                  {new Date(booking.preferredDate).toLocaleDateString()}
-                  {booking.scheduledDate ? ` · scheduled ${new Date(booking.scheduledDate).toLocaleDateString()}` : ''}
-                  {booking.finalCost != null
-                    ? ` · ${formatPriceLabel(booking.finalCost)}`
-                    : booking.estimatedCost != null
-                      ? ` · est. ${formatPriceLabel(booking.estimatedCost)}`
-                      : ''}
-                </p>
+            <li key={booking.serviceRequestId} className="surface-card flex flex-col gap-3 p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="font-medium">{booking.serviceType}</p>
+                  <p className="text-muted-foreground text-sm">
+                    {booking.status.toLowerCase().replace('_', ' ')} · {booking.priority.toLowerCase()} · preferred{' '}
+                    {new Date(booking.preferredDate).toLocaleDateString()}
+                    {booking.scheduledDate ? ` · scheduled ${new Date(booking.scheduledDate).toLocaleDateString()}` : ''}
+                    {booking.finalCost != null
+                      ? ` · ${formatPriceLabel(booking.finalCost)}`
+                      : booking.estimatedCost != null
+                        ? ` · est. ${formatPriceLabel(booking.estimatedCost)}`
+                        : ''}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <form action={startConversationAction}>
+                    <input type="hidden" name="serviceRequestId" value={booking.serviceRequestId} />
+                    <button type="submit" className="border-border hover:bg-muted rounded-md border px-2 py-1 text-xs font-medium transition-colors">
+                      Message
+                    </button>
+                  </form>
+                  {CANCELLABLE.includes(booking.status) && <TransitionButton requestId={booking.serviceRequestId} action="cancel" label="Cancel" />}
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <form action={startConversationAction}>
-                  <input type="hidden" name="serviceRequestId" value={booking.serviceRequestId} />
-                  <button type="submit" className="border-border hover:bg-muted rounded-md border px-2 py-1 text-xs font-medium transition-colors">
-                    Message
-                  </button>
-                </form>
-                {CANCELLABLE.includes(booking.status) && <TransitionButton requestId={booking.serviceRequestId} action="cancel" label="Cancel" />}
-              </div>
+              {booking.status === SERVICE_REQUEST_STATUSES.COMPLETED && (
+                <div className="border-border border-t pt-3">
+                  <p className="mb-2 text-sm font-medium">Review the center</p>
+                  <ReviewForm targetType={REVIEW_TARGET_TYPES.SERVICE_CENTER} targetId={booking.serviceCenterId} label="Submit review" />
+                </div>
+              )}
             </li>
           ))}
         </ul>

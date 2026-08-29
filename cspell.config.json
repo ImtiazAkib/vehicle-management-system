@@ -65,6 +65,8 @@
     "unbookable",
     "uninvoiced",
     "unparseable",
+    "upsert",
+    "upserts",
     "uppercased",
     "vercel",
     "vusms",

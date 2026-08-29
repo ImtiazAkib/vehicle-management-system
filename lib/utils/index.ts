@@ -13,6 +13,7 @@ export * from './llms.utils';
 export * from './money.utils';
 export * from './mongo.utils';
 export * from './order-transition.utils';
+export * from './rating.utils';
 export * from './role.utils';
 export * from './schedule-due.utils';
 export * from './url.utils';

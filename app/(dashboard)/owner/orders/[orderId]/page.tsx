@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { ORDER_STATUSES, REVIEW_TARGET_TYPES } from '@/constants/enums.const';
 import { USER_ROLES } from '@/constants/roles.const';
 import { ROUTES } from '@/constants/routes.const';
 
@@ -9,6 +10,7 @@ import { OrderService } from '@/lib/services';
 import { canAdvanceOrder, formatPriceLabel } from '@/lib/utils';
 
 import { cancelOrderAction } from '@/components/marketplace/actions';
+import { ReviewForm } from '@/components/reviews';
 import { PageHeader } from '@/components/shared';
 
 const orderService = new OrderService();
@@ -74,6 +76,13 @@ export default async function OwnerOrderDetailPage({ params }: { params: Params 
           {order.shippingAddress.postalCode ? ` ${order.shippingAddress.postalCode}` : ''}
         </p>
       </div>
+
+      {order.status === ORDER_STATUSES.DELIVERED && (
+        <div className="surface-card flex max-w-xl flex-col gap-3 p-6">
+          <h2 className="text-sm font-semibold">Rate the supplier</h2>
+          <ReviewForm targetType={REVIEW_TARGET_TYPES.SUPPLIER} targetId={order.supplierId} label="Submit review" />
+        </div>
+      )}
 
       {cancellable && (
         <form action={cancelOrderAction}>

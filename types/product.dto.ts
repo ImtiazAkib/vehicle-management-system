@@ -14,6 +14,8 @@ export type ProductDto = {
   stockQuantity: number;
   hasImage: boolean;
   isActive: boolean;
+  ratingAvg: number;
+  ratingCount: number;
   createdAt: string;
   updatedAt: string;
 };
@@ -30,6 +32,8 @@ export function productFromEntity(entity: ProductEntity): ProductDto {
     stockQuantity: entity.stockQuantity,
     hasImage: Boolean(entity.imageStorageKey),
     isActive: entity.isActive,
+    ratingAvg: entity.ratingAvg,
+    ratingCount: entity.ratingCount,
     createdAt: entity.createdAt.toISOString(),
     updatedAt: entity.updatedAt.toISOString(),
   };

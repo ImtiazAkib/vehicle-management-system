@@ -28,5 +28,7 @@ const reviewSchema = new Schema<ReviewAttributes, ReviewModel>(
 );
 reviewSchema.index({ targetType: 1, targetId: 1 });
 reviewSchema.index({ author: 1 });
+// One review per author per target: a resubmission updates the row rather than stacking a duplicate.
+reviewSchema.index({ author: 1, targetType: 1, targetId: 1 }, { unique: true });
 
 export const Review = (mongoose.models.Review as ReviewModel) ?? mongoose.model<ReviewAttributes, ReviewModel>('Review', reviewSchema);
