@@ -3,6 +3,7 @@ import type { Route } from 'next';
 import Link from 'next/link';
 
 import {
+  BarChart3,
   CalendarCheck,
   Car,
   ClipboardList,
@@ -57,10 +58,12 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
   admin: [
     { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
     { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },
+    { label: ROUTES.ADMIN_REPORTS.LABEL, href: ROUTES.ADMIN_REPORTS.HREF, icon: BarChart3 },
   ],
   'super-admin': [
     { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
     { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },
+    { label: ROUTES.ADMIN_REPORTS.LABEL, href: ROUTES.ADMIN_REPORTS.HREF, icon: BarChart3 },
   ],
 };
 

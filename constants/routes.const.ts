@@ -35,6 +35,7 @@ export const ROUTES = {
   ADMIN: { LABEL: 'Administration', HREF: '/admin' },
   ADMIN_USERS: { LABEL: 'Users', HREF: '/admin/users' },
   ADMIN_VERIFICATIONS: { LABEL: 'Verifications', HREF: '/admin/verifications' },
+  ADMIN_REPORTS: { LABEL: 'Reports', HREF: '/admin/reports' },
   OWNER: { LABEL: 'My vehicles', HREF: '/owner' },
   OWNER_VEHICLES: { LABEL: 'Vehicles', HREF: '/owner/vehicles' },
   OWNER_VEHICLES_NEW: { LABEL: 'Add a vehicle', HREF: '/owner/vehicles/new' },

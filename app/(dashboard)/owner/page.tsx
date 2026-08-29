@@ -4,8 +4,13 @@ import { USER_ROLES } from '@/constants/roles.const';
 import { ROUTES } from '@/constants/routes.const';
 
 import { requireRole } from '@/lib/auth';
+import { ReportService } from '@/lib/services';
+import { formatPriceLabel } from '@/lib/utils';
 
+import { StatTile } from '@/components/dashboard';
 import { PageHeader } from '@/components/shared';
+
+const reportService = new ReportService();
 
 const LINKS = [
   { href: ROUTES.OWNER_VEHICLES.HREF, title: 'My vehicles', summary: 'Register a vehicle and track its details.' },
@@ -19,10 +24,20 @@ const LINKS = [
 
 export default async function OwnerHomePage() {
   const user = await requireRole(USER_ROLES.OWNER);
+  const summary = (await reportService.ownerMaintenanceSummary(user.userId)).result;
 
   return (
     <section className="flex flex-col gap-6">
       <PageHeader title={`Welcome, ${user.name}`} description="Keep your vehicles, maintenance schedules and bookings in one place." />
+
+      {summary && (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <StatTile label="Vehicles" value={String(summary.vehicleCount)} />
+          <StatTile label="Schedules" value={String(summary.scheduleCount)} />
+          <StatTile label="Due soon" value={String(summary.dueSoonCount)} hint="due or overdue" />
+          <StatTile label="Total spend" value={formatPriceLabel(summary.totalSpend)} hint="paid invoices" />
+        </div>
+      )}
 
       <div className="grid gap-3 sm:grid-cols-2">
         {LINKS.map(link => (
