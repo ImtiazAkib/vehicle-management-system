@@ -8,7 +8,8 @@ coordinate the three sides. Role-based dashboards for **super-administrators**, 
 **service centers** and **suppliers**.
 
 The build is split into **21 steps**. Each one is self-contained, ends with a green build, and leaves the app in a
-working state — and because nothing is built yet, every one starts **⬜ Not started**.
+working state; the [Status at a glance](#status-at-a-glance) ledger is the source of truth for which are done. Steps 0–10
+have landed — through vehicles, the maintenance cron, service booking and center operations; steps 11–20 remain.
 
 > This project follows the shared house style of its sibling repos `ticket-management-system` and
 > `academic-workflow-synchronization-system` — the same toolchain, the same layering, the same file naming, the same
@@ -19,7 +20,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 
 ## How this works
 
-- **You start each step.** Say _"start step 8"_ and only step 8 gets built. Nothing runs ahead of your command.
+- **You start each step.** Say _"start step 11"_ and only step 11 gets built. Nothing runs ahead of your command.
 - **One step at a time.** Each step is self-contained and ends green; a step that turns out bigger than it looks gets
   split, not stretched, so the app is never left half-migrated between two of them.
 - **Definition of done is the gate.** A step is not finished when the feature works — it is finished when every check in
@@ -35,16 +36,16 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | #              | Step                                            | Phase                                       | Status         |
 | -------------- | ----------------------------------------------- | ------------------------------------------- | -------------- |
 | [0](#step-0)   | Project scaffold                                | Foundation & tooling                        | ✅ Done        |
-| [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ⬜ Not started |
-| [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ⬜ Not started |
-| [3](#step-3)   | Data model                                      | Domain model & authentication               | ⬜ Not started |
-| [4](#step-4)   | Authentication                                  | Domain model & authentication               | ⬜ Not started |
-| [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ⬜ Not started |
-| [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ⬜ Not started |
-| [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ⬜ Not started |
-| [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ⬜ Not started |
-| [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ⬜ Not started |
-| [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ⬜ Not started |
+| [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done        |
+| [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done        |
+| [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done        |
+| [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done        |
+| [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done        |
+| [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ✅ Done        |
+| [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ✅ Done        |
+| [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ✅ Done        |
+| [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ✅ Done        |
+| [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done        |
 | [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ⬜ Not started |
 | [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ⬜ Not started |
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ⬜ Not started |
@@ -56,9 +57,12 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [19](#step-19) | Polish                                          | Hardening, polish & release                 | ⬜ Not started |
 | [20](#step-20) | Testing & deployment                            | Hardening, polish & release                 | ⬜ Not started |
 
-Every row is ⬜ on purpose: this is a from-scratch build guide, so the whole shape is decided before a single line is
-written. Steps run in order, and the [Roadmap](#roadmap) groups them into the phases a schedule can hang on. A row turns
-✅ only when its step clears every gate in [Definition of done](#definition-of-done) — the table is a ledger, not a wish.
+Steps 0–10 are ✅ Done — the foundation, the domain model and auth, the four dashboards, and the full
+vehicles-maintenance-booking phase (vehicle records, the reminder cron, service booking and center operations, through
+to durable records and SERVICE invoices) all land; steps 11–20 remain ⬜. The whole shape was decided before a line was
+written — this is a from-scratch build guide — so steps run in order and the [Roadmap](#roadmap) groups them into the
+phases a schedule can hang on. A row turns ✅ only when its step clears every gate in
+[Definition of done](#definition-of-done) — the table is a ledger, not a wish.
 
 ## Roadmap
 
@@ -253,7 +257,7 @@ Skeleton    components/{owner,center,supplier,admin,auth,dashboard,marketplace,v
 
 <a id="step-1"></a>
 
-### Step 1 — Foundations
+### Step 1 — Foundations ✅ Done
 
 **Goal.** Lay the load-bearing primitives every later step imports — validated environment, the constants that name the
 product and its rules, the Mongoose singleton, the logger, the Result pattern, the API response helpers, the design
@@ -327,7 +331,7 @@ Design      app/globals.css (light default + full .dark block; primary indigo, r
 
 <a id="step-2"></a>
 
-### Step 2 — SEO, structured data and llms.txt
+### Step 2 — SEO, structured data and llms.txt ✅ Done
 
 **Goal.** The crawler and machine-readable surface, all of it derived from a single validated `APP_BASE_URL`.
 This step makes the public landing page legible to search engines, social cards and LLM crawlers, and — just
@@ -396,7 +400,7 @@ The step is done when:
 
 <a id="step-3"></a>
 
-### Step 3 — Data model
+### Step 3 — Data model ✅ Done
 
 **Goal.** Every Mongoose model, its indexes and its DTO mapper — the seventeen documents the whole platform
 reads and writes, from the `User` that authentication mints a session from to the `Order`, `Invoice` and
@@ -497,7 +501,7 @@ The step is done when:
 
 <a id="step-4"></a>
 
-### Step 4 — Authentication
+### Step 4 — Authentication ✅ Done
 
 **Goal.** The session layer and the guards every later screen leans on: `jose` mints and verifies a signed token that
 carries the role, the middleware decides whether a request may reach a protected segment at all, and the guards decide
@@ -565,7 +569,7 @@ Test         lib/auth/session.test.ts       vitest — round-trip · tampered ·
 
 <a id="step-5"></a>
 
-### Step 5 — Dashboard shell & RBAC
+### Step 5 — Dashboard shell & RBAC ✅ Done
 
 **Goal.** One dashboard shell, four role areas, and the access rules that decide who sees which — settled in one place
 instead of re-argued on every screen. With authentication proven in [step 4](#step-4), this gives each of the five
@@ -624,7 +628,7 @@ Routes       constants/routes.const.ts                 the dashboard routes, one
 
 <a id="step-6"></a>
 
-### Step 6 — Accounts: registration, verification & approval
+### Step 6 — Accounts: registration, verification & approval ✅ Done
 
 **Goal.** Self-service identity, end to end: an owner, a service center or a supplier registers themselves, proves their
 email, and — for the two business roles — waits for an admin to vouch for the profile before they can transact. This is
@@ -704,7 +708,7 @@ Script       scripts/verify-accounts.ts        manual integration harness — np
 
 <a id="step-7"></a>
 
-### Step 7 - Vehicle records
+### Step 7 - Vehicle records ✅ Done
 
 **Goal.** The owner-facing vehicle registry — the spine every other owner feature hangs off. An owner registers a car,
 edits it, retires it, and attaches a photo; schedules, maintenance records, bookings and invoices all point back at the
@@ -776,7 +780,7 @@ scripts/verify-vehicles.ts                 verify:vehicles — unique constraint
 
 <a id="step-8"></a>
 
-### Step 8 - Maintenance scheduler & reminders
+### Step 8 - Maintenance scheduler & reminders ✅ Done
 
 **Goal.** Automated maintenance tracking with a reminder cron — the promise the product is built on. An owner sets a
 time- and/or mileage-based schedule per vehicle; a separate worker sweeps for what has fallen due and enqueues a
@@ -849,7 +853,7 @@ DUE` and one past its grace flips `→ OVERDUE`; a schedule whose vehicle `curre
 
 <a id="step-9"></a>
 
-### Step 9 - Service booking
+### Step 9 - Service booking ✅ Done
 
 **Goal.** Online service requests against verified service centers, with a status lifecycle that only ever moves along a
 legal edge. An owner books a service at a center an admin has vetted; the center accepts, schedules, works and completes
@@ -918,7 +922,7 @@ scripts/verify-bookings.ts                 verify:bookings
 
 <a id="step-10"></a>
 
-### Step 10 - Service-center operations
+### Step 10 - Service-center operations ✅ Done
 
 **Goal.** The service-center side of a booking, carried through to a durable maintenance record and a SERVICE invoice. A
 center manages its own profile, works the requests assigned to it, records what was actually done, and bills for it — and
