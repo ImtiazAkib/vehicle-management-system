@@ -45,18 +45,25 @@
     "nosniff",
     "nuqs",
     "odometer",
+    "officedocument",
     "oklch",
     "opengraph",
+    "openxmlformats",
     "passwordless",
     "pino",
     "prerenders",
+    "presentationml",
     "ratelimits",
     "schedulable",
     "shadcn",
+    "spreadsheetml",
     "topbar",
+    "transactable",
     "twilio",
     "uppercased",
     "vercel",
-    "vusms"
+    "vusms",
+    "webp",
+    "wordprocessingml"
   ]
 }

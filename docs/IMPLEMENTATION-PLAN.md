@@ -35,7 +35,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | #              | Step                                            | Phase                                       | Status         |
 | -------------- | ----------------------------------------------- | ------------------------------------------- | -------------- |
 | [0](#step-0)   | Project scaffold                                | Foundation & tooling                        | ✅ Done        |
-| [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ⬜ Not started |
+| [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done        |
 | [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ⬜ Not started |
 | [3](#step-3)   | Data model                                      | Domain model & authentication               | ⬜ Not started |
 | [4](#step-4)   | Authentication                                  | Domain model & authentication               | ⬜ Not started |
@@ -253,7 +253,7 @@ Skeleton    components/{owner,center,supplier,admin,auth,dashboard,marketplace,v
 
 <a id="step-1"></a>
 
-### Step 1 — Foundations
+### Step 1 — Foundations ✅ Done
 
 **Goal.** Lay the load-bearing primitives every later step imports — validated environment, the constants that name the
 product and its rules, the Mongoose singleton, the logger, the Result pattern, the API response helpers, the design
