@@ -40,7 +40,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done        |
 | [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done        |
 | [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done        |
-| [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ⬜ Not started |
+| [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ✅ Done        |
 | [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ⬜ Not started |
 | [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ⬜ Not started |
 | [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ⬜ Not started |
@@ -624,7 +624,7 @@ Routes       constants/routes.const.ts                 the dashboard routes, one
 
 <a id="step-6"></a>
 
-### Step 6 — Accounts: registration, verification & approval
+### Step 6 — Accounts: registration, verification & approval ✅ Done
 
 **Goal.** Self-service identity, end to end: an owner, a service center or a supplier registers themselves, proves their
 email, and — for the two business roles — waits for an admin to vouch for the profile before they can transact. This is

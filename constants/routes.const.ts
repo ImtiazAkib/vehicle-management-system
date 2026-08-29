@@ -33,6 +33,8 @@ export const ROUTES = {
     profile sits outside the role areas, behind the session alone. These land in step 5.
   */
   ADMIN: { LABEL: 'Administration', HREF: '/admin' },
+  ADMIN_USERS: { LABEL: 'Users', HREF: '/admin/users' },
+  ADMIN_VERIFICATIONS: { LABEL: 'Verifications', HREF: '/admin/verifications' },
   OWNER: { LABEL: 'My vehicles', HREF: '/owner' },
   CENTER: { LABEL: 'Service center', HREF: '/center' },
   SUPPLIER: { LABEL: 'Supplier', HREF: '/supplier' },
