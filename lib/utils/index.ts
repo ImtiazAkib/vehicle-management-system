@@ -9,4 +9,5 @@ export * from './class-name.utils';
 export * from './llms.utils';
 export * from './money.utils';
 export * from './mongo.utils';
+export * from './role.utils';
 export * from './url.utils';

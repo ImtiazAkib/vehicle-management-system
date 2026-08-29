@@ -39,7 +39,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done        |
 | [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done        |
 | [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done        |
-| [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ⬜ Not started |
+| [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done        |
 | [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ⬜ Not started |
 | [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ⬜ Not started |
 | [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ⬜ Not started |
@@ -565,7 +565,7 @@ Test         lib/auth/session.test.ts       vitest — round-trip · tampered ·
 
 <a id="step-5"></a>
 
-### Step 5 — Dashboard shell & RBAC
+### Step 5 — Dashboard shell & RBAC ✅ Done
 
 **Goal.** One dashboard shell, four role areas, and the access rules that decide who sees which — settled in one place
 instead of re-argued on every screen. With authentication proven in [step 4](#step-4), this gives each of the five
