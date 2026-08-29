@@ -5,3 +5,5 @@ export * from './forgot-password.schema';
 export * from './reset-password.schema';
 export * from './vehicle.schema';
 export * from './maintenance-schedule.schema';
+export * from './booking-create.schema';
+export * from './booking-transition.schema';

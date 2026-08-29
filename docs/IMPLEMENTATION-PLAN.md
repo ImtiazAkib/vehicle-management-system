@@ -849,7 +849,7 @@ DUE` and one past its grace flips `→ OVERDUE`; a schedule whose vehicle `curre
 
 <a id="step-9"></a>
 
-### Step 9 - Service booking
+### Step 9 - Service booking ✅ Done
 
 **Goal.** Online service requests against verified service centers, with a status lifecycle that only ever moves along a
 legal edge. An owner books a service at a center an admin has vetted; the center accepts, schedules, works and completes

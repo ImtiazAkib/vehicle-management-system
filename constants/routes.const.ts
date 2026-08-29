@@ -40,7 +40,10 @@ export const ROUTES = {
   OWNER_VEHICLES_NEW: { LABEL: 'Add a vehicle', HREF: '/owner/vehicles/new' },
   OWNER_SCHEDULES: { LABEL: 'Maintenance', HREF: '/owner/schedules' },
   OWNER_SCHEDULES_NEW: { LABEL: 'Add a schedule', HREF: '/owner/schedules/new' },
+  OWNER_BOOKINGS: { LABEL: 'Bookings', HREF: '/owner/bookings' },
+  OWNER_BOOKINGS_NEW: { LABEL: 'Book a service', HREF: '/owner/bookings/new' },
   CENTER: { LABEL: 'Service center', HREF: '/center' },
+  CENTER_REQUESTS: { LABEL: 'Service requests', HREF: '/center/requests' },
   SUPPLIER: { LABEL: 'Supplier', HREF: '/supplier' },
   PROFILE: { LABEL: 'Profile', HREF: '/profile' },
 } as const;

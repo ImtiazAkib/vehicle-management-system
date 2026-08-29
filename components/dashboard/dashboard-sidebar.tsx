@@ -1,6 +1,8 @@
+import type { Route } from 'next';
+
 import Link from 'next/link';
 
-import { Home, User as UserIcon } from 'lucide-react';
+import { CalendarCheck, Car, ClipboardList, Home, ShieldCheck, User as UserIcon, Users, Wrench } from 'lucide-react';
 
 import { UserRole } from '@/types';
 
@@ -8,6 +10,28 @@ import { APP_DATA } from '@/constants/app-data.const';
 import { ROLE_HOME, ROUTES } from '@/constants/routes.const';
 
 import { cn } from '@/lib/utils';
+
+/*
+  The role-specific middle of the nav — the feature areas a role owns. Each entry lands as the step that
+  builds its page does, so a `<Link>` never points at a route `typedRoutes` has not seen. Home and Profile
+  bracket these for every role.
+*/
+const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typeof Home }[]>> = {
+  owner: [
+    { label: ROUTES.OWNER_VEHICLES.LABEL, href: ROUTES.OWNER_VEHICLES.HREF, icon: Car },
+    { label: ROUTES.OWNER_SCHEDULES.LABEL, href: ROUTES.OWNER_SCHEDULES.HREF, icon: Wrench },
+    { label: ROUTES.OWNER_BOOKINGS.LABEL, href: ROUTES.OWNER_BOOKINGS.HREF, icon: CalendarCheck },
+  ],
+  'service-center': [{ label: ROUTES.CENTER_REQUESTS.LABEL, href: ROUTES.CENTER_REQUESTS.HREF, icon: ClipboardList }],
+  admin: [
+    { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
+    { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },
+  ],
+  'super-admin': [
+    { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
+    { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },
+  ],
+};
 
 export type DashboardShellUser = {
   name: string;
@@ -29,6 +53,7 @@ type DashboardSidebarProps = {
 export function DashboardSidebar({ role, user }: DashboardSidebarProps) {
   const navItems = [
     { label: 'Home', href: ROLE_HOME[role], icon: Home },
+    ...(ROLE_NAV[role] ?? []),
     { label: 'Profile', href: ROUTES.PROFILE.HREF, icon: UserIcon },
   ];
 
