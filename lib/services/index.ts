@@ -7,3 +7,4 @@ export * from './service-center.service';
 export * from './invoice.service';
 export * from './supplier.service';
 export * from './product.service';
+export * from './order.service';

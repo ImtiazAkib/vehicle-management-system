@@ -10,6 +10,7 @@ import {
   Package,
   ReceiptText,
   ShieldCheck,
+  ShoppingBag,
   ShoppingCart,
   Store,
   User as UserIcon,
@@ -35,9 +36,11 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
     { label: ROUTES.OWNER_SCHEDULES.LABEL, href: ROUTES.OWNER_SCHEDULES.HREF, icon: Wrench },
     { label: ROUTES.OWNER_BOOKINGS.LABEL, href: ROUTES.OWNER_BOOKINGS.HREF, icon: CalendarCheck },
     { label: ROUTES.OWNER_MARKETPLACE.LABEL, href: ROUTES.OWNER_MARKETPLACE.HREF, icon: ShoppingCart },
+    { label: ROUTES.OWNER_ORDERS.LABEL, href: ROUTES.OWNER_ORDERS.HREF, icon: ShoppingBag },
   ],
   supplier: [
     { label: ROUTES.SUPPLIER_PRODUCTS.LABEL, href: ROUTES.SUPPLIER_PRODUCTS.HREF, icon: Package },
+    { label: ROUTES.SUPPLIER_ORDERS.LABEL, href: ROUTES.SUPPLIER_ORDERS.HREF, icon: ClipboardList },
     { label: ROUTES.SUPPLIER_PROFILE.LABEL, href: ROUTES.SUPPLIER_PROFILE.HREF, icon: Store },
   ],
   'service-center': [

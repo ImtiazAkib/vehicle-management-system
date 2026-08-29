@@ -14,3 +14,5 @@ export * from './product-create.schema';
 export * from './product-update.schema';
 export * from './product-browse.schema';
 export * from './supplier-profile.schema';
+export * from './order-create.schema';
+export * from './order-status.schema';

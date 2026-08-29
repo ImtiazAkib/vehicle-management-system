@@ -8,6 +8,7 @@ import { requireRole } from '@/lib/auth';
 import { ProductService } from '@/lib/services';
 import { formatPriceLabel } from '@/lib/utils';
 
+import { CheckoutForm } from '@/components/marketplace';
 import { PageHeader } from '@/components/shared';
 
 const productService = new ProductService();
@@ -37,13 +38,13 @@ export default async function ProductDetailPage({ params }: { params: Params }) 
         <p className="text-muted-foreground text-sm">{product.stockQuantity > 0 ? `${product.stockQuantity} in stock` : 'Out of stock'}</p>
         {product.description && <p className="text-sm">{product.description}</p>}
 
-        {/* Ordering is added in the next step; for now the detail page is the entry point it will attach to. */}
-        <button
-          type="button"
-          disabled
-          className="bg-primary text-primary-foreground w-fit cursor-not-allowed rounded-md px-4 py-2 text-sm font-semibold opacity-60">
-          Order — coming soon
-        </button>
+        {product.stockQuantity > 0 ? (
+          <div className="border-border mt-2 border-t pt-4">
+            <CheckoutForm productId={product.productId} supplierId={product.supplierId} maxQuantity={product.stockQuantity} />
+          </div>
+        ) : (
+          <p className="text-muted-foreground text-sm">This product is out of stock right now.</p>
+        )}
       </div>
 
       <Link href={ROUTES.OWNER_MARKETPLACE.HREF} className="text-muted-foreground text-sm underline-offset-4 hover:underline">

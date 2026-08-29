@@ -47,7 +47,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ✅ Done        |
 | [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done        |
 | [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ✅ Done        |
-| [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ⬜ Not started |
+| [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ✅ Done        |
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ⬜ Not started |
 | [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ⬜ Not started |
@@ -1057,7 +1057,7 @@ The step is done when:
 
 <a id="step-12"></a>
 
-### Step 12 — Orders & fulfillment
+### Step 12 — Orders & fulfillment ✅ Done
 
 **Goal.** Owners order utility supplies from a single supplier, and suppliers move those orders from placed to delivered.
 It follows the marketplace because it is the marketplace's write path: [step 11](#step-11) made a product findable, and
