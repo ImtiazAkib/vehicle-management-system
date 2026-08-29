@@ -10,6 +10,7 @@ import { PageHeader } from '@/components/shared';
 const LINKS = [
   { href: ROUTES.SUPPLIER_PRODUCTS.HREF, title: 'Products', summary: 'List parts and consumables and manage their stock.' },
   { href: ROUTES.SUPPLIER_ORDERS.HREF, title: 'Orders', summary: 'Work your fulfillment queue from placed to delivered.' },
+  { href: ROUTES.SUPPLIER_INVOICES.HREF, title: 'Invoices', summary: 'Bill your orders and track what is owed.' },
   { href: ROUTES.SUPPLIER_PROFILE.HREF, title: 'Supplier profile', summary: 'The business details buyers see when browsing.' },
 ] as const;
 

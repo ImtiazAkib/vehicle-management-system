@@ -15,11 +15,16 @@ export const BILLING_DATABASE = {
 export const BILLING_VALIDATION = {
   REQUEST_NOT_FOUND: createErrorDefinition(27700, 'Booking not found.'),
   INVOICE_NOT_FOUND: createErrorDefinition(27701, 'Invoice not found.'),
+  ORDER_NOT_FOUND: createErrorDefinition(27702, 'Order not found.'),
 } as const;
 
 /** Billing — business layer (37xxx). */
 export const BILLING_BUSINESS = {
   NOT_ASSIGNED_CENTER: createErrorDefinition(37700, 'That booking is not assigned to your center.'),
   BOOKING_NOT_COMPLETED: createErrorDefinition(37701, 'You can only invoice a completed booking.'),
-  ALREADY_INVOICED: createErrorDefinition(37702, 'This booking has already been invoiced.'),
+  ALREADY_INVOICED: createErrorDefinition(37702, 'This has already been invoiced.'),
+  NOT_ASSIGNED_SUPPLIER: createErrorDefinition(37703, 'That order is not assigned to your catalog.'),
+  ORDER_NOT_INVOICEABLE: createErrorDefinition(37704, 'You cannot invoice a cancelled order.'),
+  NOT_PAYER: createErrorDefinition(37705, 'That invoice is not addressed to you.'),
+  INVOICE_NOT_PAYABLE: createErrorDefinition(37706, 'That invoice is already settled or cancelled.'),
 } as const;

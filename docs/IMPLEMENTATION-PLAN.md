@@ -48,7 +48,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done        |
 | [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ✅ Done        |
 | [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ✅ Done        |
-| [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ⬜ Not started |
+| [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ✅ Done        |
 | [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ⬜ Not started |
@@ -1120,7 +1120,7 @@ The step is done when:
 
 <a id="step-13"></a>
 
-### Step 13 — Invoices & payments
+### Step 13 — Invoices & payments ✅ Done
 
 **Goal.** Billing for both sides of the platform — a `SERVICE` invoice for a completed booking and an `ORDER` invoice for
 a fulfilled order — and the payments that settle them. It comes after both transactable flows are built because it is

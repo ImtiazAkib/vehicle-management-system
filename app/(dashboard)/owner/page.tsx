@@ -13,6 +13,7 @@ const LINKS = [
   { href: ROUTES.OWNER_BOOKINGS.HREF, title: 'Bookings', summary: 'Book a service at a verified center and follow its progress.' },
   { href: ROUTES.OWNER_MARKETPLACE.HREF, title: 'Marketplace', summary: 'Browse and order parts and supplies from verified suppliers.' },
   { href: ROUTES.OWNER_ORDERS.HREF, title: 'Orders', summary: 'Track your marketplace orders and their delivery.' },
+  { href: ROUTES.OWNER_INVOICES.HREF, title: 'Invoices', summary: 'Settle bills for your services and orders.' },
 ] as const;
 
 export default async function OwnerHomePage() {

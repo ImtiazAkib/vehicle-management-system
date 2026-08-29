@@ -16,3 +16,5 @@ export * from './product-browse.schema';
 export * from './supplier-profile.schema';
 export * from './order-create.schema';
 export * from './order-status.schema';
+export * from './order-invoice.schema';
+export * from './payment-record.schema';
