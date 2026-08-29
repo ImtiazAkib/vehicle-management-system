@@ -5,6 +5,7 @@ import { UserService } from '@/lib/services';
 import { resolveRoleLabel } from '@/lib/utils';
 
 import { setAccountActiveAction } from '@/components/admin/actions';
+import { PageHeader } from '@/components/shared';
 
 const userService = new UserService();
 
@@ -15,10 +16,10 @@ export default async function AdminUsersPage() {
   const users = result.result ?? [];
 
   return (
-    <section className="flex flex-col gap-4">
-      <h1>Users</h1>
+    <section className="flex flex-col gap-6">
+      <PageHeader title="Users" description="Every account on the platform. Activate or deactivate any but the super administrator." />
 
-      <div className="overflow-x-auto">
+      <div className="surface-card overflow-x-auto p-4">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-border text-muted-foreground border-b">

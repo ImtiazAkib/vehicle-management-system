@@ -1,3 +1,5 @@
+import { ClipboardList } from 'lucide-react';
+
 import { SERVICE_REQUEST_STATUSES } from '@/constants/enums.const';
 import { USER_ROLES } from '@/constants/roles.const';
 
@@ -6,6 +8,7 @@ import { ServiceRequestService } from '@/lib/services';
 import { formatPriceLabel } from '@/lib/utils';
 
 import { AcceptForm, CompleteForm, TransitionButton } from '@/components/bookings';
+import { EmptyState, PageHeader } from '@/components/shared';
 
 const service = new ServiceRequestService();
 
@@ -14,15 +17,15 @@ export default async function CenterRequestsPage() {
   const requests = (await service.findForCenter(center.userId)).result ?? [];
 
   return (
-    <section className="flex flex-col gap-4">
-      <h1>Service requests</h1>
+    <section className="flex flex-col gap-6">
+      <PageHeader title="Service requests" description="Accept, schedule, start and complete the bookings assigned to your center." />
 
       {requests.length === 0 ? (
-        <p className="text-muted-foreground">No service requests assigned to your center yet.</p>
+        <EmptyState icon={ClipboardList} title="No requests yet" description="Bookings owners make against your center will appear here." />
       ) : (
         <ul className="flex flex-col gap-2">
           {requests.map(request => (
-            <li key={request.serviceRequestId} className="border-border flex flex-col gap-3 rounded-md border p-3">
+            <li key={request.serviceRequestId} className="surface-card flex flex-col gap-3 p-4">
               <div>
                 <p className="font-medium">{request.serviceType}</p>
                 <p className="text-muted-foreground text-sm">

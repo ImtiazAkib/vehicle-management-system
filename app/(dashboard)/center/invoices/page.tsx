@@ -7,6 +7,7 @@ import { InvoiceService, ServiceRequestService } from '@/lib/services';
 import { formatPriceLabel } from '@/lib/utils';
 
 import { issueServiceInvoiceAction } from '@/components/center/actions';
+import { PageHeader } from '@/components/shared';
 
 const invoiceService = new InvoiceService();
 const requestService = new ServiceRequestService();
@@ -26,7 +27,7 @@ export default async function CenterInvoicesPage() {
 
   return (
     <section className="flex flex-col gap-6">
-      <h1>Invoices</h1>
+      <PageHeader title="Invoices" description="Bill completed bookings and track what is owed." />
 
       <div className="flex flex-col gap-2">
         <h2 className="text-sm font-semibold">Ready to invoice</h2>
@@ -35,7 +36,7 @@ export default async function CenterInvoicesPage() {
         ) : (
           <ul className="flex flex-col gap-2">
             {uninvoiced.map(request => (
-              <li key={request.serviceRequestId} className="border-border flex flex-wrap items-end justify-between gap-3 rounded-md border p-3">
+              <li key={request.serviceRequestId} className="surface-card flex flex-wrap items-end justify-between gap-3 p-4">
                 <div>
                   <p className="font-medium">{request.serviceType}</p>
                   <p className="text-muted-foreground text-sm">
@@ -73,7 +74,7 @@ export default async function CenterInvoicesPage() {
         ) : (
           <ul className="flex flex-col gap-2">
             {invoices.map(invoice => (
-              <li key={invoice.invoiceId} className="border-border flex items-center justify-between gap-4 rounded-md border p-3">
+              <li key={invoice.invoiceId} className="surface-card flex items-center justify-between gap-4 p-4">
                 <div>
                   <p className="font-medium">{formatPriceLabel(invoice.total)}</p>
                   <p className="text-muted-foreground text-sm">

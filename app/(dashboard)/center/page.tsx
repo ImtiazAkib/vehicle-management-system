@@ -7,6 +7,8 @@ import { ROUTES } from '@/constants/routes.const';
 import { requireRole } from '@/lib/auth';
 import { ServiceRequestService } from '@/lib/services';
 
+import { PageHeader } from '@/components/shared';
+
 const service = new ServiceRequestService();
 
 const LINKS = [
@@ -28,23 +30,20 @@ export default async function CenterHomePage() {
 
   return (
     <section className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
-        <h1>Welcome, {user.name}</h1>
-        <p className="text-muted-foreground">Work the requests assigned to your center, record what you did, and bill for it.</p>
-      </div>
+      <PageHeader title={`Welcome, ${user.name}`} description="Work the requests assigned to your center, record what you did, and bill for it." />
 
-      <div className="grid gap-2 sm:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-3">
         {stats.map(stat => (
-          <div key={stat.label} className="border-border flex flex-col gap-0.5 rounded-md border p-4">
+          <div key={stat.label} className="surface-card flex flex-col gap-0.5 p-5">
             <span className="text-2xl font-semibold">{stat.value}</span>
             <span className="text-muted-foreground text-sm">{stat.label}</span>
           </div>
         ))}
       </div>
 
-      <div className="grid gap-2 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2">
         {LINKS.map(link => (
-          <Link key={link.href} href={link.href} className="border-border hover:bg-muted flex flex-col gap-0.5 rounded-md border p-4">
+          <Link key={link.href} href={link.href} className="surface-card hover:bg-muted flex flex-col gap-0.5 p-5 transition-colors">
             <span className="text-sm font-semibold">{link.title}</span>
             <span className="text-muted-foreground text-sm">{link.summary}</span>
           </Link>

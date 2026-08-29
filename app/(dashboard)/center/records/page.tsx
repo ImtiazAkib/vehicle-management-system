@@ -1,8 +1,12 @@
+import { Wrench } from 'lucide-react';
+
 import { USER_ROLES } from '@/constants/roles.const';
 
 import { requireRole } from '@/lib/auth';
 import { ServiceCenterService } from '@/lib/services';
 import { formatPriceLabel } from '@/lib/utils';
+
+import { EmptyState, PageHeader } from '@/components/shared';
 
 const centerService = new ServiceCenterService();
 
@@ -11,15 +15,15 @@ export default async function CenterRecordsPage() {
   const records = (await centerService.recordsForCenter(center.userId)).result ?? [];
 
   return (
-    <section className="flex flex-col gap-4">
-      <h1>Records</h1>
+    <section className="flex flex-col gap-6">
+      <PageHeader title="Records" description="The maintenance work your center has logged — one per completed booking." />
 
       {records.length === 0 ? (
-        <p className="text-muted-foreground">No maintenance records yet. Completing a booking writes one here.</p>
+        <EmptyState icon={Wrench} title="No records yet" description="Completing a booking writes a durable maintenance record here." />
       ) : (
         <ul className="flex flex-col gap-2">
           {records.map(record => (
-            <li key={record.recordId} className="border-border flex items-center justify-between gap-4 rounded-md border p-3">
+            <li key={record.recordId} className="surface-card flex items-center justify-between gap-4 p-4">
               <div>
                 <p className="font-medium">{record.serviceType}</p>
                 <p className="text-muted-foreground text-sm">
