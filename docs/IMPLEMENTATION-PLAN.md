@@ -37,7 +37,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [0](#step-0)   | Project scaffold                                | Foundation & tooling                        | ✅ Done        |
 | [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done        |
 | [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done        |
-| [3](#step-3)   | Data model                                      | Domain model & authentication               | ⬜ Not started |
+| [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done        |
 | [4](#step-4)   | Authentication                                  | Domain model & authentication               | ⬜ Not started |
 | [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ⬜ Not started |
 | [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ⬜ Not started |
@@ -396,7 +396,7 @@ The step is done when:
 
 <a id="step-3"></a>
 
-### Step 3 — Data model
+### Step 3 — Data model ✅ Done
 
 **Goal.** Every Mongoose model, its indexes and its DTO mapper — the seventeen documents the whole platform
 reads and writes, from the `User` that authentication mints a session from to the `Order`, `Invoice` and
