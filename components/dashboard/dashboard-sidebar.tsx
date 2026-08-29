@@ -2,7 +2,20 @@ import type { Route } from 'next';
 
 import Link from 'next/link';
 
-import { CalendarCheck, Car, ClipboardList, Home, ReceiptText, ShieldCheck, Store, User as UserIcon, Users, Wrench } from 'lucide-react';
+import {
+  CalendarCheck,
+  Car,
+  ClipboardList,
+  Home,
+  Package,
+  ReceiptText,
+  ShieldCheck,
+  ShoppingCart,
+  Store,
+  User as UserIcon,
+  Users,
+  Wrench,
+} from 'lucide-react';
 
 import { UserRole } from '@/types';
 
@@ -21,6 +34,11 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
     { label: ROUTES.OWNER_VEHICLES.LABEL, href: ROUTES.OWNER_VEHICLES.HREF, icon: Car },
     { label: ROUTES.OWNER_SCHEDULES.LABEL, href: ROUTES.OWNER_SCHEDULES.HREF, icon: Wrench },
     { label: ROUTES.OWNER_BOOKINGS.LABEL, href: ROUTES.OWNER_BOOKINGS.HREF, icon: CalendarCheck },
+    { label: ROUTES.OWNER_MARKETPLACE.LABEL, href: ROUTES.OWNER_MARKETPLACE.HREF, icon: ShoppingCart },
+  ],
+  supplier: [
+    { label: ROUTES.SUPPLIER_PRODUCTS.LABEL, href: ROUTES.SUPPLIER_PRODUCTS.HREF, icon: Package },
+    { label: ROUTES.SUPPLIER_PROFILE.LABEL, href: ROUTES.SUPPLIER_PROFILE.HREF, icon: Store },
   ],
   'service-center': [
     { label: ROUTES.CENTER_REQUESTS.LABEL, href: ROUTES.CENTER_REQUESTS.HREF, icon: ClipboardList },

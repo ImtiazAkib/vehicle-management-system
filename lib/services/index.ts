@@ -5,3 +5,5 @@ export * from './maintenance.service';
 export * from './service-request.service';
 export * from './service-center.service';
 export * from './invoice.service';
+export * from './supplier.service';
+export * from './product.service';

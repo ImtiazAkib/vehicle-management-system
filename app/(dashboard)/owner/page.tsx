@@ -11,6 +11,7 @@ const LINKS = [
   { href: ROUTES.OWNER_VEHICLES.HREF, title: 'My vehicles', summary: 'Register a vehicle and track its details.' },
   { href: ROUTES.OWNER_SCHEDULES.HREF, title: 'Maintenance', summary: 'Set schedules and get reminders before a service falls due.' },
   { href: ROUTES.OWNER_BOOKINGS.HREF, title: 'Bookings', summary: 'Book a service at a verified center and follow its progress.' },
+  { href: ROUTES.OWNER_MARKETPLACE.HREF, title: 'Marketplace', summary: 'Browse and order parts and supplies from verified suppliers.' },
 ] as const;
 
 export default async function OwnerHomePage() {

@@ -46,7 +46,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ✅ Done        |
 | [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ✅ Done        |
 | [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done        |
-| [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ⬜ Not started |
+| [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ✅ Done        |
 | [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ⬜ Not started |
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ⬜ Not started |
 | [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ⬜ Not started |
@@ -986,7 +986,7 @@ constants/codes-billing.const.ts           feature digit 7 (issue side; extended
 
 <a id="step-11"></a>
 
-### Step 11 — Marketplace: suppliers & products
+### Step 11 — Marketplace: suppliers & products ✅ Done
 
 **Goal.** The utility-supply catalog that verified suppliers manage and vehicle owners browse — the seller-side of the
 platform that turns "I need an oil filter" into a listing an owner can find, filter, and order. It sits after service

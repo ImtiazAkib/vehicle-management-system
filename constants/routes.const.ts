@@ -47,7 +47,11 @@ export const ROUTES = {
   CENTER_RECORDS: { LABEL: 'Records', HREF: '/center/records' },
   CENTER_INVOICES: { LABEL: 'Invoices', HREF: '/center/invoices' },
   CENTER_PROFILE: { LABEL: 'Center profile', HREF: '/center/profile' },
+  OWNER_MARKETPLACE: { LABEL: 'Marketplace', HREF: '/owner/marketplace' },
   SUPPLIER: { LABEL: 'Supplier', HREF: '/supplier' },
+  SUPPLIER_PRODUCTS: { LABEL: 'Products', HREF: '/supplier/products' },
+  SUPPLIER_PRODUCTS_NEW: { LABEL: 'Add a product', HREF: '/supplier/products/new' },
+  SUPPLIER_PROFILE: { LABEL: 'Supplier profile', HREF: '/supplier/profile' },
   PROFILE: { LABEL: 'Profile', HREF: '/profile' },
 } as const;
 

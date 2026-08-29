@@ -10,3 +10,7 @@ export * from './booking-transition.schema';
 export * from './record-on-completion.schema';
 export * from './service-center-profile.schema';
 export * from './service-invoice.schema';
+export * from './product-create.schema';
+export * from './product-update.schema';
+export * from './product-browse.schema';
+export * from './supplier-profile.schema';

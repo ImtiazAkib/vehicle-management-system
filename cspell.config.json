@@ -63,6 +63,7 @@
     "transactable",
     "unbookable",
     "uninvoiced",
+    "unparseable",
     "uppercased",
     "vercel",
     "vusms",
