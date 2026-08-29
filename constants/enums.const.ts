@@ -113,8 +113,6 @@ export const PAYMENT_STATUSES = {
 export const NOTIFICATION_CHANNELS = {
   IN_APP: 'IN_APP',
   EMAIL: 'EMAIL',
-  SMS: 'SMS',
-  PUSH: 'PUSH',
 } as const satisfies Record<string, NotificationChannel>;
 
 export const REVIEW_TARGET_TYPES = {

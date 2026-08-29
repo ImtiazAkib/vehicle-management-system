@@ -74,12 +74,11 @@ export const FEATURES = [
   {
     title: 'Invoices and payments',
     description:
-      'Billing for both services and orders in integer minor units — no float in the money path — behind a payment-gateway seam a real provider slots into without a rewrite.',
+      'Billing for both services and orders in integer minor units — no float in the money path — with payments recorded in the database and invoices marked paid, no external gateway.',
   },
   {
     title: 'Messaging and notifications',
-    description:
-      'Owner-to-center messaging scoped to a booking, and notifications that fan out across in-app, email, SMS and push as the domain events happen.',
+    description: 'Owner-to-center messaging scoped to a booking, and notifications that surface in-app and by email as the domain events happen.',
   },
 ] as const;
 

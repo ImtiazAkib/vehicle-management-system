@@ -28,8 +28,8 @@ export type InvoiceStatus = 'UNPAID' | 'PAID' | 'OVERDUE' | 'CANCELLED';
 export type PaymentMethod = 'CARD' | 'CASH' | 'BANK_TRANSFER' | 'WALLET';
 export type PaymentStatus = 'PENDING' | 'SUCCEEDED' | 'FAILED' | 'REFUNDED';
 
-// Notifications
-export type NotificationChannel = 'IN_APP' | 'EMAIL' | 'SMS' | 'PUSH';
+// Notifications — delivered in-app and by email (nodemailer); no SMS/push provider.
+export type NotificationChannel = 'IN_APP' | 'EMAIL';
 
 // Reviews
 export type ReviewTargetType = 'SERVICE_CENTER' | 'SUPPLIER' | 'PRODUCT';
