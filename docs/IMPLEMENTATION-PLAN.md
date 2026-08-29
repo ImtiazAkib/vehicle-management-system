@@ -8,7 +8,8 @@ coordinate the three sides. Role-based dashboards for **super-administrators**, 
 **service centers** and **suppliers**.
 
 The build is split into **21 steps**. Each one is self-contained, ends with a green build, and leaves the app in a
-working state — and because nothing is built yet, every one starts **⬜ Not started**.
+working state; the [Status at a glance](#status-at-a-glance) ledger is the source of truth for which are done. Steps 0–10
+have landed — through vehicles, the maintenance cron, service booking and center operations; steps 11–20 remain.
 
 > This project follows the shared house style of its sibling repos `ticket-management-system` and
 > `academic-workflow-synchronization-system` — the same toolchain, the same layering, the same file naming, the same
@@ -19,7 +20,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 
 ## How this works
 
-- **You start each step.** Say _"start step 8"_ and only step 8 gets built. Nothing runs ahead of your command.
+- **You start each step.** Say _"start step 11"_ and only step 11 gets built. Nothing runs ahead of your command.
 - **One step at a time.** Each step is self-contained and ends green; a step that turns out bigger than it looks gets
   split, not stretched, so the app is never left half-migrated between two of them.
 - **Definition of done is the gate.** A step is not finished when the feature works — it is finished when every check in
@@ -42,9 +43,9 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done        |
 | [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ✅ Done        |
 | [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ✅ Done        |
-| [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ⬜ Not started |
-| [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ⬜ Not started |
-| [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ⬜ Not started |
+| [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ✅ Done        |
+| [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ✅ Done        |
+| [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done        |
 | [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ⬜ Not started |
 | [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ⬜ Not started |
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ⬜ Not started |
@@ -56,9 +57,12 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [19](#step-19) | Polish                                          | Hardening, polish & release                 | ⬜ Not started |
 | [20](#step-20) | Testing & deployment                            | Hardening, polish & release                 | ⬜ Not started |
 
-Every row is ⬜ on purpose: this is a from-scratch build guide, so the whole shape is decided before a single line is
-written. Steps run in order, and the [Roadmap](#roadmap) groups them into the phases a schedule can hang on. A row turns
-✅ only when its step clears every gate in [Definition of done](#definition-of-done) — the table is a ledger, not a wish.
+Steps 0–10 are ✅ Done — the foundation, the domain model and auth, the four dashboards, and the full
+vehicles-maintenance-booking phase (vehicle records, the reminder cron, service booking and center operations, through
+to durable records and SERVICE invoices) all land; steps 11–20 remain ⬜. The whole shape was decided before a line was
+written — this is a from-scratch build guide — so steps run in order and the [Roadmap](#roadmap) groups them into the
+phases a schedule can hang on. A row turns ✅ only when its step clears every gate in
+[Definition of done](#definition-of-done) — the table is a ledger, not a wish.
 
 ## Roadmap
 

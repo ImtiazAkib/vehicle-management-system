@@ -6,18 +6,19 @@ role-scoped dashboards for owners, service centers, suppliers and administrators
 
 **Next.js 16 · React 19 · TypeScript (strict) · Tailwind v4 · MongoDB/Mongoose · `jose` sessions · GridFS uploads · `node-cron` reminders · English only.**
 
-> **Current state.** Nothing is built yet — this repository is the **plan**, and the build is executed one step
-> at a time against it. The [implementation plan](docs/IMPLEMENTATION-PLAN.md) lays out **steps 0–20, every one
-> not started**, and names what each delivers: the toolchain and design tokens, the data-access primitives, the
-> SEO and crawler surface, the Mongoose data model and its DTOs, the `jose` session and RBAC spine, the
-> role-scoped dashboard shell, self-registration with email verification and admin approval, vehicle records,
-> the **maintenance-reminder cron**, service **booking** and center operations, the **marketplace** of verified
-> suppliers, orders with atomic stock, invoices and payments, owner↔center messaging, multi-channel
-> notifications, reviews and reports, then the hardening, polish, tests, CI and deployment. Each step is
-> self-contained and ends on a green lint, format, `tsc`, test and build; the database round-trips run as
-> `verify:*` scripts against a real cluster. Deployment is documented in [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md),
-> the visual walkthrough is [`docs/project-overview.html`](docs/project-overview.html), and the sequencing is the
-> [roadmap](#roadmap).
+> **Current state.** **Steps 0–10 are built**; the build continues one step at a time against the plan. Done so
+> far: the toolchain and design tokens, the data-access primitives, the SEO and crawler surface, the Mongoose
+> data model and its DTOs, the `jose` session and RBAC spine, the role-scoped dashboard shell, self-registration
+> with email verification and admin approval, vehicle records, the **maintenance-reminder cron**, service
+> **booking** and center operations through to durable records and SERVICE invoices. Still to come in **steps
+> 11–20**: the **marketplace** of verified suppliers, orders with atomic stock, invoices and payments, owner↔center
+> messaging, multi-channel notifications, reviews and reports, then the hardening, polish, tests, CI and
+> deployment. The [implementation plan](docs/IMPLEMENTATION-PLAN.md) lays out all **steps 0–20** and names what
+> each delivers; its [Status at a glance](docs/IMPLEMENTATION-PLAN.md#status-at-a-glance) ledger is the source of
+> truth for progress. Each step is self-contained and ends on a green lint, format, `tsc`, test and build; the
+> database round-trips run as `verify:*` scripts against a real cluster. Deployment is documented in
+> [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), the visual walkthrough is
+> [`docs/project-overview.html`](docs/project-overview.html), and the sequencing is the [roadmap](#roadmap).
 
 ---
 
@@ -419,8 +420,8 @@ it the right role"; the service re-checks besides, and server actions re-gate th
 
 ## Roadmap
 
-The proposal's phases, mapped onto the [21 steps](docs/IMPLEMENTATION-PLAN.md#steps). Every step is **not started**
-— this is the build order.
+The proposal's phases, mapped onto the [21 steps](docs/IMPLEMENTATION-PLAN.md#steps). **Steps 0–10 are done; 11–20
+remain** — this is the build order, and [Status at a glance](docs/IMPLEMENTATION-PLAN.md#status-at-a-glance) tracks it.
 
 | Phase                                       | Activity                                                                       | Deliverable                                                    | Week     | Steps |
 | ------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- | -------- | ----- |
