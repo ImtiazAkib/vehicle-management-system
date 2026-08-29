@@ -6,18 +6,19 @@ role-scoped dashboards for owners, service centers, suppliers and administrators
 
 **Next.js 16 · React 19 · TypeScript (strict) · Tailwind v4 · MongoDB/Mongoose · `jose` sessions · GridFS uploads · `node-cron` reminders · English only.**
 
-> **Current state.** Nothing is built yet — this repository is the **plan**, and the build is executed one step
-> at a time against it. The [implementation plan](docs/IMPLEMENTATION-PLAN.md) lays out **steps 0–20, every one
-> not started**, and names what each delivers: the toolchain and design tokens, the data-access primitives, the
-> SEO and crawler surface, the Mongoose data model and its DTOs, the `jose` session and RBAC spine, the
-> role-scoped dashboard shell, self-registration with email verification and admin approval, vehicle records,
-> the **maintenance-reminder cron**, service **booking** and center operations, the **marketplace** of verified
-> suppliers, orders with atomic stock, invoices and payments, owner↔center messaging, multi-channel
-> notifications, reviews and reports, then the hardening, polish, tests, CI and deployment. Each step is
-> self-contained and ends on a green lint, format, `tsc`, test and build; the database round-trips run as
-> `verify:*` scripts against a real cluster. Deployment is documented in [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md),
-> the visual walkthrough is [`docs/project-overview.html`](docs/project-overview.html), and the sequencing is the
-> [roadmap](#roadmap).
+> **Current state.** **Steps 0–10 are built**; the build continues one step at a time against the plan. Done so
+> far: the toolchain and design tokens, the data-access primitives, the SEO and crawler surface, the Mongoose
+> data model and its DTOs, the `jose` session and RBAC spine, the role-scoped dashboard shell, self-registration
+> with email verification and admin approval, vehicle records, the **maintenance-reminder cron**, service
+> **booking** and center operations through to durable records and SERVICE invoices. Still to come in **steps
+> 11–20**: the **marketplace** of verified suppliers, orders with atomic stock, invoices and payments, owner↔center
+> messaging, in-app and email notifications, reviews and reports, then the hardening, polish, tests, CI and
+> deployment. The [implementation plan](docs/IMPLEMENTATION-PLAN.md) lays out all **steps 0–20** and names what
+> each delivers; its [Status at a glance](docs/IMPLEMENTATION-PLAN.md#status-at-a-glance) ledger is the source of
+> truth for progress. Each step is self-contained and ends on a green lint, format, `tsc`, test and build; the
+> database round-trips run as `verify:*` scripts against a real cluster. Deployment is documented in
+> [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md), the visual walkthrough is
+> [`docs/project-overview.html`](docs/project-overview.html), and the sequencing is the [roadmap](#roadmap).
 
 ---
 
@@ -104,21 +105,21 @@ service centers and suppliers self-register too, but become **transactable only 
 
 ## Tech stack
 
-| Layer        | Choice                                               | Why                                                                                            |
-| ------------ | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| Framework    | Next.js 16 (App Router, RSC), React 19               | Server-first; the dashboards are server components and every mutation is a Server Action.      |
-| Language     | TypeScript, `strict`                                 | `type` aliases only — no `interface`, no `any`, no unchecked casts; DTO mappers instead.       |
-| Styling      | Tailwind v4 + shadcn on Base UI                      | Inline utilities against design tokens; `cn()` for conditionals, never a `className` constant. |
-| Localization | **None — English only**                              | Copy is literal text in the JSX; no `next-intl`, no `[locale]` segment, no `l10n/`.            |
-| Database     | MongoDB + Mongoose 9                                 | `dbName` set in code; a GridFS `uploads` bucket; partial unique indexes enforce the rules.     |
-| Validation   | zod 4                                                | One schema per action; the service consumes the parsed output, never the raw form.             |
-| Auth         | `jose` session JWT in an httpOnly cookie             | No auth library; the session carries the role, and revocation is a live per-request re-check.  |
-| Reminders    | `node-cron` worker + a queue                         | A second PM2 app sweeps schedules that fell **DUE** and enqueues notifications, idempotently.  |
-| Mail / SMS   | `nodemailer` (smtp/log seam); Twilio when configured | Absence of SMTP config selects the log transport, so a clean clone still "sends".              |
-| Payments     | Invoice/Payment records; Stripe optional             | Absent `STRIPE_*` disables the card channel; the ledger still records and marks **PAID**.      |
-| Images       | `sharp` → WebP                                       | Magic-byte verified, compressed against pixel-bombs, capped in GridFS. No SVG, by design.      |
-| Logging      | `pino` (pretty in dev, JSON in prod)                 | Ids and outcomes only — no name, email, token or storage key ever becomes a log field.         |
-| Money        | Integer minor units                                  | Floating-point money is a bug with a delay on it.                                              |
+| Layer        | Choice                                   | Why                                                                                            |
+| ------------ | ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Framework    | Next.js 16 (App Router, RSC), React 19   | Server-first; the dashboards are server components and every mutation is a Server Action.      |
+| Language     | TypeScript, `strict`                     | `type` aliases only — no `interface`, no `any`, no unchecked casts; DTO mappers instead.       |
+| Styling      | Tailwind v4 + shadcn on Base UI          | Inline utilities against design tokens; `cn()` for conditionals, never a `className` constant. |
+| Localization | **None — English only**                  | Copy is literal text in the JSX; no `next-intl`, no `[locale]` segment, no `l10n/`.            |
+| Database     | MongoDB + Mongoose 9                     | `dbName` set in code; a GridFS `uploads` bucket; partial unique indexes enforce the rules.     |
+| Validation   | zod 4                                    | One schema per action; the service consumes the parsed output, never the raw form.             |
+| Auth         | `jose` session JWT in an httpOnly cookie | No auth library; the session carries the role, and revocation is a live per-request re-check.  |
+| Reminders    | `node-cron` worker + a queue             | A second PM2 app sweeps schedules that fell **DUE** and enqueues notifications, idempotently.  |
+| Mail         | `nodemailer` (smtp/log seam)             | Absence of SMTP config selects the log transport, so a clean clone still "sends". No SMS.      |
+| Payments     | `Invoice`/`Payment` records in MongoDB   | Settlement is recorded and the invoice marked **PAID** — a ledger, not a card gateway.         |
+| Images       | `sharp` → WebP                           | Magic-byte verified, compressed against pixel-bombs, capped in GridFS. No SVG, by design.      |
+| Logging      | `pino` (pretty in dev, JSON in prod)     | Ids and outcomes only — no name, email, token or storage key ever becomes a log field.         |
+| Money        | Integer minor units                      | Floating-point money is a bug with a delay on it.                                              |
 
 Dependencies are **pinned exact** — no `^`, no `~` — so a fresh `npm install` resolves the same tree every time.
 
@@ -165,8 +166,6 @@ loudly by design.
 | `SMTP_USER`         | no            | —                                        | SMTP auth user.                                                              |
 | `SMTP_PASSWORD`     | no            | —                                        | SMTP auth password.                                                          |
 | `SMTP_FROM`         | no            | `Vehicle Utilities <no-reply@localhost>` | The `From` header on outgoing mail.                                          |
-| `TWILIO_*`          | no            | — (SMS disabled)                         | Absent disables the SMS notification channel.                                |
-| `STRIPE_*`          | no            | — (card disabled)                        | Absent disables card payments; invoices still record and settle.             |
 
 `SEED_SUPER_ADMIN_NAME` / `_EMAIL` / `_PASSWORD` are read **only** by `npm run seed:super-admin`, never by the
 app. They live in `.env.local` as documentation, commented in `.env.example`.
@@ -348,7 +347,7 @@ and never reach a DTO**; rules are indexes, not hopeful service checks.
 | `Invoice`                  | `SERVICE` or `ORDER`, the referenced booking/order, owner, issuer, totals, status, dates.                                       |
 | `Payment`                  | The invoice, amount, method, status and an optional transaction reference.                                                      |
 | `Conversation` / `Message` | Owner↔center threads (optionally tied to a booking) and their messages.                                                         |
-| `Notification`             | The multi-channel feed row — `IN_APP`/`EMAIL`/`SMS`/`PUSH`, read flag.                                                          |
+| `Notification`             | The feed row — `IN_APP`/`EMAIL`, read flag.                                                                                     |
 | `Review`                   | An owner's rating of a `SERVICE_CENTER`, `SUPPLIER` or `PRODUCT`, recomputing the target's average.                             |
 
 Guarantees that are **indexes, not queries**: exactly one super-admin (a partial unique index on `role`), a `vin`,
@@ -419,8 +418,8 @@ it the right role"; the service re-checks besides, and server actions re-gate th
 
 ## Roadmap
 
-The proposal's phases, mapped onto the [21 steps](docs/IMPLEMENTATION-PLAN.md#steps). Every step is **not started**
-— this is the build order.
+The proposal's phases, mapped onto the [21 steps](docs/IMPLEMENTATION-PLAN.md#steps). **Steps 0–10 are done; 11–20
+remain** — this is the build order, and [Status at a glance](docs/IMPLEMENTATION-PLAN.md#status-at-a-glance) tracks it.
 
 | Phase                                       | Activity                                                                       | Deliverable                                                    | Week     | Steps |
 | ------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------- | -------- | ----- |

@@ -982,8 +982,8 @@
     <div class="section-head">
       <h2>Build progress</h2>
       <p>
-        Twenty-one steps, each self-contained and each ending on a green lint, format and build. Nothing is built yet — the repository ships as
-        scaffold and plan, and every step below is planned.
+        Twenty-one steps, each self-contained and each ending on a green lint, format and build. Steps 00–10 are done — through vehicles, the
+        maintenance cron, service booking and center operations; steps 11–20 are still to come.
       </p>
     </div>
 
@@ -993,7 +993,7 @@
         <div class="step">
           <span class="step-n">00</span>
           <span class="step-name">Project scaffold</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">
             Toolchain, design tokens (indigo + four role accents), landing page, cached Mongoose connection, PM2 on port 3104.
           </span>
@@ -1001,7 +1001,7 @@
         <div class="step">
           <span class="step-n">01</span>
           <span class="step-name">Foundations</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">
             Validated env, Result pattern, API responses, pino logger, money-in-minor-units utils, 5-digit error-code registry.
           </span>
@@ -1009,12 +1009,12 @@
         <div class="step">
           <span class="step-n">02</span>
           <span class="step-name">SEO, structured data &amp; llms.txt</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
         </div>
         <div class="step">
           <span class="step-n">03</span>
           <span class="step-name">Data model</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">Every collection, DTO mappers, the single-super-admin and unique vin / registration / sku indexes.</span>
         </div>
       </div>
@@ -1026,29 +1026,29 @@
         <div class="step">
           <span class="step-n">04</span>
           <span class="step-name">Authentication</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">jose HS256 session, revocation re-checked each request, fail-closed for privileged roles on a DB outage.</span>
         </div>
         <div class="step">
           <span class="step-n">05</span>
           <span class="step-name">Dashboard shell &amp; RBAC</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
         </div>
         <div class="step">
           <span class="step-n">06</span>
           <span class="step-name">Accounts: registration, verification &amp; approval</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">Owners usable on email verification; centers and suppliers transactable only after admin verification.</span>
         </div>
         <div class="step">
           <span class="step-n">07</span>
           <span class="step-name">Vehicle records</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
         </div>
         <div class="step">
           <span class="step-n">08</span>
           <span class="step-name">Maintenance scheduler &amp; reminders</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">
             The flagship — computeDue advances UPCOMING → DUE → OVERDUE and the send:reminders worker files a Notification before the date passes.
           </span>
@@ -1056,13 +1056,13 @@
         <div class="step">
           <span class="step-n">09</span>
           <span class="step-name">Service booking</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
           <span class="step-note">A booking walks legal transitions only; a raw status write does not exist.</span>
         </div>
         <div class="step">
           <span class="step-n">10</span>
           <span class="step-name">Service-center operations</span>
-          <span class="status">Planned</span>
+          <span class="status done">Done</span>
         </div>
       </div>
     </div>
@@ -1073,7 +1073,7 @@
         <div class="step">
           <span class="step-n">11</span>
           <span class="step-name">Marketplace: suppliers &amp; products</span>
-          <span class="status">Planned</span>
+          <span class="status next">Next</span>
         </div>
         <div class="step">
           <span class="step-n">12</span>

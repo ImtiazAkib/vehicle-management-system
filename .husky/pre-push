@@ -9,5 +9,8 @@
 echo "Running unit tests before push..."
 npm run test
 
+echo "Running type check before push..."
+npm run typecheck
+
 echo "Running production build before push..."
 npm run build
