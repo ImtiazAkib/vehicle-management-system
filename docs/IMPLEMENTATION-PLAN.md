@@ -53,7 +53,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ✅ Done        |
 | [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ✅ Done        |
 | [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ✅ Done        |
-| [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ⬜ Not started |
+| [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ✅ Done        |
 | [19](#step-19) | Polish                                          | Hardening, polish & release                 | ⬜ Not started |
 | [20](#step-20) | Testing & deployment                            | Hardening, polish & release                 | ⬜ Not started |
 
@@ -1439,7 +1439,7 @@ The step is done when:
 
 <a id="step-18"></a>
 
-### Step 18 — Hardening
+### Step 18 — Hardening ✅ Done
 
 **Goal.** Close the abuse vectors before anyone can reach them. Every feature is built by this point, so this step
 stops adding surface and starts defending it — the security headers, the pre-buffer upload checks, a rate limit on
