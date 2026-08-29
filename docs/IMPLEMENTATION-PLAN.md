@@ -38,7 +38,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done        |
 | [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done        |
 | [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done        |
-| [4](#step-4)   | Authentication                                  | Domain model & authentication               | ⬜ Not started |
+| [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done        |
 | [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ⬜ Not started |
 | [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ⬜ Not started |
 | [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ⬜ Not started |
@@ -497,7 +497,7 @@ The step is done when:
 
 <a id="step-4"></a>
 
-### Step 4 — Authentication
+### Step 4 — Authentication ✅ Done
 
 **Goal.** The session layer and the guards every later screen leans on: `jose` mints and verifies a signed token that
 carries the role, the middleware decides whether a request may reach a protected segment at all, and the guards decide
