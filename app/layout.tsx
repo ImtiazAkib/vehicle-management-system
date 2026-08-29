@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import type { Metadata, Viewport } from 'next';
 
 import { Inter, Poppins } from 'next/font/google';
+import { cookies } from 'next/headers';
 
 import { APP_DATA, SEO } from '@/constants';
 import { env } from '@/env/server';
@@ -79,9 +80,17 @@ type RootLayoutProps = {
   The font variables sit on `<html>`: `--font-body` resolves to `--font-inter` and `--font-display` to
   `--font-poppins` in `globals.css`, and a custom property resolves against the element that declares it.
 */
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  /*
+    Resolve the theme on the server so the first paint is already correct: `light` / `dark` stamp the class
+    the CSS keys on, and `system` (or an absent cookie) leaves it off so `prefers-color-scheme` decides. No
+    client effect repaints after mount — a theme flash is a bug you ship to the eyes.
+  */
+  const theme = (await cookies()).get('vusms.theme')?.value;
+  const themeClass = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : undefined;
+
   return (
-    <html lang="en" data-scroll-behavior="smooth" className={cn(inter.variable, poppins.variable)}>
+    <html lang="en" data-scroll-behavior="smooth" className={cn(inter.variable, poppins.variable, themeClass)}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );

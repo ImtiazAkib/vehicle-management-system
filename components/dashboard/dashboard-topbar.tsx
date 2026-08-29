@@ -4,6 +4,8 @@ import { ROUTES } from '@/constants/routes.const';
 
 import { clearSessionCookie } from '@/lib/auth';
 
+import { ThemeToggle } from '@/components/shared';
+
 import { NotificationBell } from './notification-bell';
 
 import type { DashboardShellUser } from './dashboard-sidebar';
@@ -31,6 +33,7 @@ export function DashboardTopbar({ user, unread }: DashboardTopbarProps) {
       </p>
 
       <div className="flex items-center gap-2">
+        <ThemeToggle />
         <NotificationBell unread={unread} />
         <form action={signOut}>
           <button type="submit" className="border-border hover:bg-muted rounded-md border px-3 py-1.5 text-sm font-medium">

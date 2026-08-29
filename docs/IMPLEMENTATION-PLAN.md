@@ -54,7 +54,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ✅ Done        |
 | [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ✅ Done        |
 | [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ✅ Done        |
-| [19](#step-19) | Polish                                          | Hardening, polish & release                 | ⬜ Not started |
+| [19](#step-19) | Polish                                          | Hardening, polish & release                 | ✅ Done        |
 | [20](#step-20) | Testing & deployment                            | Hardening, polish & release                 | ⬜ Not started |
 
 Steps 0–10 are ✅ Done — the foundation, the domain model and auth, the four dashboards, and the full
@@ -1513,7 +1513,7 @@ scripts/verify-accounts.ts                exercises the rate-limit budgets and t
 
 <a id="step-19"></a>
 
-### Step 19 — Polish
+### Step 19 — Polish ✅ Done
 
 **Goal.** The finish pass that turns a working app into a comfortable one — the theme resolved on the server so the
 first paint is already correct, one form shape and one dialog shape shared across every screen, the marketing landing

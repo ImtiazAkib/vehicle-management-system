@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { APP_DATA } from '@/constants/app-data.const';
 import { ROUTES, SECTION_IDS } from '@/constants/routes.const';
 
+import { ThemeToggle } from '@/components/shared';
+
 const NAV = [
   { label: 'Roles', href: `#${SECTION_IDS.ROLES}` },
   { label: 'Features', href: `#${SECTION_IDS.FEATURES}` },
@@ -36,6 +38,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-1.5">
+          <ThemeToggle />
           <Link href={ROUTES.SIGN_IN.HREF} className="hover:bg-muted rounded-md px-3 py-2 text-sm font-medium transition-colors">
             Sign in
           </Link>
