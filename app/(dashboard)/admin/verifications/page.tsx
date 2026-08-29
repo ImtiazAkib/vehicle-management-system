@@ -2,6 +2,7 @@ import { requireAdminArea } from '@/lib/auth';
 import { UserService } from '@/lib/services';
 
 import { verifyServiceCenterAction, verifySupplierAction } from '@/components/admin/actions';
+import { PageHeader } from '@/components/shared';
 
 const userService = new UserService();
 
@@ -13,10 +14,7 @@ export default async function AdminVerificationsPage() {
 
   return (
     <section className="flex flex-col gap-8">
-      <div className="flex flex-col gap-2">
-        <h1>Verifications</h1>
-        <p className="text-muted-foreground">Service centers and suppliers awaiting verification. Verifying one makes it transactable.</p>
-      </div>
+      <PageHeader title="Verifications" description="Service centers and suppliers awaiting verification. Verifying one makes it transactable." />
 
       <div className="flex flex-col gap-3">
         <h2>Service centers</h2>
@@ -25,7 +23,7 @@ export default async function AdminVerificationsPage() {
         ) : (
           <ul className="flex flex-col gap-2">
             {centers.map(center => (
-              <li key={center.serviceCenterId} className="border-border flex items-center justify-between gap-4 rounded-md border p-3">
+              <li key={center.serviceCenterId} className="surface-card flex items-center justify-between gap-4 p-4">
                 <div>
                   <p className="text-sm font-medium">{center.centerName}</p>
                   <p className="text-muted-foreground text-sm">
@@ -53,7 +51,7 @@ export default async function AdminVerificationsPage() {
         ) : (
           <ul className="flex flex-col gap-2">
             {suppliers.map(supplier => (
-              <li key={supplier.supplierId} className="border-border flex items-center justify-between gap-4 rounded-md border p-3">
+              <li key={supplier.supplierId} className="surface-card flex items-center justify-between gap-4 p-4">
                 <div>
                   <p className="text-sm font-medium">{supplier.businessName}</p>
                   <p className="text-muted-foreground text-sm">
