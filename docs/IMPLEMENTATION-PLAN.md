@@ -1167,9 +1167,10 @@ scripts/verify-invoices.ts             issues both invoice types, records coveri
 - **A covering successful payment flips two rows, in one transaction.** When the `SUCCEEDED` payments recorded against an
   invoice cover its `total`, the invoice moves to `PAID`; and for an `ORDER` invoice, `Order.paymentStatus` moves to
   `PAID` in the same transaction — two rows or neither, never a paid invoice against an unpaid order.
-- **Card data is delegated, never stored.** Card settlement is handed to an optional provider (Stripe when configured);
-  we persist only the `method` and a `transactionRef`, and if no provider is configured the card channel is simply
-  disabled. **A card number you keep is a breach you scheduled.**
+- **Payments are recorded in MongoDB — there is no card gateway.** Settlement happens out of band (cash, bank transfer,
+  wallet, or a card taken at the counter); the platform records only the `method`, the `amount`, and an optional
+  `transactionRef`, then marks the invoice `PAID` when the recorded payments cover its total. No `STRIPE_*`, no
+  webhooks, no card numbers. **A card number you keep is a breach you scheduled — so we never take one.**
 - **The invoice PDF is rendered server-side and streamed access-checked.** It is generated into the GridFS `uploads`
   bucket and served through the owner-gated download route with `nosniff` — never a guessable public link, because an
   invoice is a private financial record, not a shared asset.
@@ -1257,9 +1258,9 @@ The step is done when:
 ### Step 15 - Notifications
 
 **Goal.** A single, recipient-scoped feed fed by the domain events that already exist — a maintenance schedule that
-fell `DUE`, a booking that changed status, an order or payment that moved, a new message — surfaced in-app and, when a
-provider is configured, echoed over email, SMS and push. This step delivers the notification service, the channel
-drivers, the wiring from each producer, and the topbar bell.
+fell `DUE`, a booking that changed status, an order or payment that moved, a new message — surfaced in-app and echoed
+over email (nodemailer). This step delivers the notification service, the two channel drivers, the wiring from each
+producer, and the topbar bell. There is no SMS or push channel — email is the only outbound one.
 
 **Why this matters.** The proposal's headline objective is to automate maintenance tracking with _timely reminders_ —
 an owner who misses an oil change, a filter, or a battery swap is the exact failure this platform exists to prevent.
@@ -1274,9 +1275,7 @@ lib/services/notification.service.ts    NotificationService — create · listFo
 lib/notifications/channel.types.ts      NotificationChannel shape — deliver(notification)
 lib/notifications/in-app.channel.ts     writes the Notification row — the source of truth, always on
 lib/notifications/email.channel.ts      best-effort via lib/mail (nodemailer / log-fallback)
-lib/notifications/sms.channel.ts        optional Twilio — disabled when TWILIO_* is absent
-lib/notifications/push.channel.ts       optional — disabled when its provider env is absent
-lib/notifications/dispatch.ts           fan-out: in-app first, the rest best-effort
+lib/notifications/dispatch.ts           fan-out: in-app first, then email best-effort
 lib/notifications/index.ts              barrel
 types/notification.dto.ts               NotificationDto + notificationFromEntity
 components/dashboard/notification-bell.tsx   topbar affordance — unread count + feed dropdown
@@ -1289,12 +1288,13 @@ lib/services/message.service.ts         (wired) send -> notify the other partici
 
 **Notes.**
 
-- **The in-app channel is the source of truth; the other channels are best-effort deliveries of the same event.**
-  `dispatch` writes the `Notification` row first, then attempts email, SMS and push; a failed outbound channel is
-  logged, never thrown. **The record is the notification; the email is only its echo.**
-- **Channels degrade gracefully when a provider env is absent.** SMS is disabled when `TWILIO_*` is unset, push when
-  its provider env is unset — the `deliver` call becomes a no-op, not a failure. **A missing SMS provider is a
-  disabled channel, not a failed booking.**
+- **The in-app channel is the source of truth; email is a best-effort echo of the same event.** `dispatch` writes the
+  `Notification` row first, then attempts email; a failed send is logged, never thrown. **The record is the
+  notification; the email is only its echo.**
+- **Email degrades to the log transport when SMTP is absent.** With `SMTP_HOST` unset, `lib/mail` writes each message
+  to the logger instead of sending — the `deliver` call still succeeds, so the whole flow runs on a laptop with no
+  mail account. There is no SMS or push channel to configure. **A missing mail server is a logged message, not a
+  failed booking.**
 - **Every notification is scoped to its recipient `user`.** `listForUser` and `unreadCount` filter by the session
   user, so no feed ever carries another account's events; a notification's `data` payload never embeds a bearer
   secret or a storage key.
@@ -1315,8 +1315,8 @@ The step is done when:
   `verify:orders`, all run in sequence by `npm run smoke`.
 - `unreadCount` returns the correct number for the session user and `markNotificationReadAction` zeroes the read
   rows.
-- With `TWILIO_*` and the push provider env absent, SMS and PUSH are disabled cleanly — `IN_APP` still writes and,
-  when `SMTP_*` is present, `EMAIL` still sends; the graceful-degradation path is covered by `npm run test`.
+- `IN_APP` always writes, and `EMAIL` sends when `SMTP_*` is present and falls back to the log transport when it is
+  absent; the graceful-degradation path is covered by `npm run test`.
 - A second reminder sweep of the same `DUE` schedule notifies no one twice — `lastNotifiedAt` is the truth, proven by
   `npm run verify:scheduling`.
 - `npm run lint`, `npm run test` and `npm run build` are green with the topbar bell rendering its count.
@@ -1639,13 +1639,11 @@ Real work that is deliberately parked. Each item names the step that surfaced it
 
 | Item                                | Why it is parked                                                                                                                                   |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Live card payments (Stripe)         | Payments record against invoices; a real card gateway with webhooks is deferred behind the optional STRIPE_* env. Surfaced in [step 13](#step-13). |
-| SMS / push delivery                 | The channels exist behind optional providers; wiring Twilio/FCM for real is deferred. Surfaced in [step 15](#step-15).                             |
 | Predictive maintenance              | Reminders are interval-based; mileage-trend prediction needs a model and more history. Surfaced in [step 8](#step-8).                              |
 | OBD-II / telematics ingest          | Mileage is entered by the owner; automatic ingest from a device is a separate integration. Surfaced in [step 7](#step-7).                          |
 | Fleet / multi-vehicle organizations | Accounts are single-owner; fleet accounts with sub-users need a tenancy model. Surfaced in [step 6](#step-6).                                      |
 | Multi-supplier cart                 | An order targets one supplier; a basket spanning suppliers needs order-splitting. Surfaced in [step 12](#step-12).                                 |
 | Internationalization                | English-only for now; the [locale] segment and a message pipeline are deferred (the academic sibling carries this). Surfaced in [step 2](#step-2). |
-| Per-user notification preferences   | Notifications fan out to all enabled channels; per-user channel opt-out is deferred. Surfaced in [step 15](#step-15).                              |
+| Per-user notification preferences   | Notifications go to in-app and email; per-user opt-out of the email echo is deferred. Surfaced in [step 15](#step-15).                             |
 | Revoking a live session             | Revocation lands within the hour via re-validation; instant revoke needs a sessionVersion. Surfaced in [step 4](#step-4).                          |
 | Storybook + Playwright E2E          | Unit + integration harnesses cover the cores; component and end-to-end suites are deferred. Surfaced in [step 20](#step-20).                       |

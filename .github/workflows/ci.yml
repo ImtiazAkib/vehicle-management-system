@@ -1,0 +1,45 @@
+name: CI
+
+# The build guard. The pre-push hook runs lint, format, typecheck, test and build locally, but a hook can
+# be skipped with --no-verify; this runs the same gate on GitHub for every push and pull request, where it
+# cannot be bypassed. A red check here is what stops a broken build from reaching a shared branch.
+on:
+  push:
+    branches: ['**']
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Husky installs git hooks in `prepare`; there is nothing to install in CI.
+      HUSKY: '0'
+      # The env schema requires these present, and `next build` imports it — but nothing connects during a
+      # build, so dummy build-time values are enough. Real secrets live only on the deployment, never here.
+      MONGODB_URI: 'mongodb://127.0.0.1:27017/vehicle-utilities'
+      AUTH_SECRET: 'ci-build-time-only-secret-not-used-at-runtime'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Unit tests
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
