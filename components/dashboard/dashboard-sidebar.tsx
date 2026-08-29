@@ -2,7 +2,23 @@ import type { Route } from 'next';
 
 import Link from 'next/link';
 
-import { CalendarCheck, Car, ClipboardList, Home, ReceiptText, ShieldCheck, Store, User as UserIcon, Users, Wrench } from 'lucide-react';
+import {
+  BarChart3,
+  CalendarCheck,
+  Car,
+  ClipboardList,
+  Home,
+  MessageSquare,
+  Package,
+  ReceiptText,
+  ShieldCheck,
+  ShoppingBag,
+  ShoppingCart,
+  Store,
+  User as UserIcon,
+  Users,
+  Wrench,
+} from 'lucide-react';
 
 import { UserRole } from '@/types';
 
@@ -21,20 +37,33 @@ const ROLE_NAV: Partial<Record<UserRole, { label: string; href: Route; icon: typ
     { label: ROUTES.OWNER_VEHICLES.LABEL, href: ROUTES.OWNER_VEHICLES.HREF, icon: Car },
     { label: ROUTES.OWNER_SCHEDULES.LABEL, href: ROUTES.OWNER_SCHEDULES.HREF, icon: Wrench },
     { label: ROUTES.OWNER_BOOKINGS.LABEL, href: ROUTES.OWNER_BOOKINGS.HREF, icon: CalendarCheck },
+    { label: ROUTES.OWNER_MARKETPLACE.LABEL, href: ROUTES.OWNER_MARKETPLACE.HREF, icon: ShoppingCart },
+    { label: ROUTES.OWNER_ORDERS.LABEL, href: ROUTES.OWNER_ORDERS.HREF, icon: ShoppingBag },
+    { label: ROUTES.OWNER_INVOICES.LABEL, href: ROUTES.OWNER_INVOICES.HREF, icon: ReceiptText },
+    { label: ROUTES.OWNER_MESSAGES.LABEL, href: ROUTES.OWNER_MESSAGES.HREF, icon: MessageSquare },
+  ],
+  supplier: [
+    { label: ROUTES.SUPPLIER_PRODUCTS.LABEL, href: ROUTES.SUPPLIER_PRODUCTS.HREF, icon: Package },
+    { label: ROUTES.SUPPLIER_ORDERS.LABEL, href: ROUTES.SUPPLIER_ORDERS.HREF, icon: ClipboardList },
+    { label: ROUTES.SUPPLIER_INVOICES.LABEL, href: ROUTES.SUPPLIER_INVOICES.HREF, icon: ReceiptText },
+    { label: ROUTES.SUPPLIER_PROFILE.LABEL, href: ROUTES.SUPPLIER_PROFILE.HREF, icon: Store },
   ],
   'service-center': [
     { label: ROUTES.CENTER_REQUESTS.LABEL, href: ROUTES.CENTER_REQUESTS.HREF, icon: ClipboardList },
     { label: ROUTES.CENTER_RECORDS.LABEL, href: ROUTES.CENTER_RECORDS.HREF, icon: Wrench },
     { label: ROUTES.CENTER_INVOICES.LABEL, href: ROUTES.CENTER_INVOICES.HREF, icon: ReceiptText },
+    { label: ROUTES.CENTER_MESSAGES.LABEL, href: ROUTES.CENTER_MESSAGES.HREF, icon: MessageSquare },
     { label: ROUTES.CENTER_PROFILE.LABEL, href: ROUTES.CENTER_PROFILE.HREF, icon: Store },
   ],
   admin: [
     { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
     { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },
+    { label: ROUTES.ADMIN_REPORTS.LABEL, href: ROUTES.ADMIN_REPORTS.HREF, icon: BarChart3 },
   ],
   'super-admin': [
     { label: ROUTES.ADMIN_USERS.LABEL, href: ROUTES.ADMIN_USERS.HREF, icon: Users },
     { label: ROUTES.ADMIN_VERIFICATIONS.LABEL, href: ROUTES.ADMIN_VERIFICATIONS.HREF, icon: ShieldCheck },
+    { label: ROUTES.ADMIN_REPORTS.LABEL, href: ROUTES.ADMIN_REPORTS.HREF, icon: BarChart3 },
   ],
 };
 

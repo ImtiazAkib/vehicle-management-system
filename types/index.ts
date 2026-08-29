@@ -17,3 +17,4 @@ export * from './conversation.dto';
 export * from './message.dto';
 export * from './notification.dto';
 export * from './review.dto';
+export * from './report.dto';

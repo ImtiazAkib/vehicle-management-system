@@ -3,9 +3,12 @@ import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 
 import { requireSession } from '@/lib/auth';
+import { NotificationService } from '@/lib/services';
 import { resolveInitials, resolveRoleLabel, roleAccentClassName } from '@/lib/utils';
 
 import { DashboardSidebar, DashboardTopbar } from '@/components/dashboard';
+
+const notificationService = new NotificationService();
 
 /*
   Two independent signals keep the signed-in surface out of search results: this metadata, and the
@@ -30,6 +33,7 @@ type DashboardLayoutProps = {
  */
 export default async function DashboardLayout({ children }: DashboardLayoutProps) {
   const sessionUser = await requireSession();
+  const unread = await notificationService.unreadCount(sessionUser.userId);
 
   const user = {
     name: sessionUser.name,
@@ -43,7 +47,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
       <DashboardSidebar role={sessionUser.role} user={user} />
 
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <DashboardTopbar user={user} />
+        <DashboardTopbar user={user} unread={unread} />
 
         <main id="main-content" tabIndex={-1} className="min-h-0 flex-1 overflow-y-auto p-4 lg:p-8">
           {children}
