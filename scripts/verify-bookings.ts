@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import { MaintenanceRecord } from '@/models/maintenance-record.model';
+import { Notification } from '@/models/notification.model';
 import { ServiceCenterProfile } from '@/models/service-center-profile.model';
 import { ServiceRequest } from '@/models/service-request.model';
 import { User } from '@/models/user.model';
@@ -119,6 +120,11 @@ async function run(): Promise<void> {
     }
     pass('accept records the scheduled date and estimate and moves to ACCEPTED');
 
+    if ((await Notification.countDocuments({ user: owner._id, type: 'booking' })) < 1) {
+      throw new Error('a booking transition must notify the owner');
+    }
+    pass('a booking transition writes a notification to the owner');
+
     const started = expectSuccess(await service.transition(centerAId, { action: 'start', serviceRequestId: bookingId }), 'start');
     if (started.status !== SERVICE_REQUEST_STATUSES.IN_PROGRESS) {
       throw new Error('start must move to IN_PROGRESS');
@@ -182,6 +188,7 @@ async function run(): Promise<void> {
 
     console.log(`\nAll ${checks} checks passed.`);
   } finally {
+    await Notification.deleteMany({ user: owner._id });
     await MaintenanceRecord.deleteMany({ vehicle: vehicle._id });
     await ServiceRequest.deleteMany({ owner: owner._id });
     await Vehicle.deleteMany({ _id: vehicle._id });

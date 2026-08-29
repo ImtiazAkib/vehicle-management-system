@@ -2,31 +2,45 @@ import mongoose from 'mongoose';
 
 import { Invoice } from '@/models/invoice.model';
 import { MaintenanceRecord } from '@/models/maintenance-record.model';
+import { OrderItem } from '@/models/order-item.model';
+import { Order } from '@/models/order.model';
+import { Payment } from '@/models/payment.model';
+import { Product } from '@/models/product.model';
 import { ServiceCenterProfile } from '@/models/service-center-profile.model';
 import { ServiceRequest } from '@/models/service-request.model';
+import { SupplierProfile } from '@/models/supplier-profile.model';
 import { User } from '@/models/user.model';
 import { Vehicle } from '@/models/vehicle.model';
 
 import { CODES } from '@/constants/codes.const';
-import { INVOICE_STATUSES, INVOICE_TYPES, SERVICE_REQUEST_PRIORITIES } from '@/constants/enums.const';
+import {
+  INVOICE_STATUSES,
+  INVOICE_TYPES,
+  ORDER_PAYMENT_STATUSES,
+  PAYMENT_METHODS,
+  PRODUCT_CATEGORIES,
+  SERVICE_REQUEST_PRIORITIES,
+} from '@/constants/enums.const';
 import { USER_ROLES } from '@/constants/roles.const';
 
 import { connectToDatabase } from '@/lib/mongodb';
 import type { SingleResult } from '@/lib/result';
-import { InvoiceService, ServiceRequestService } from '@/lib/services';
+import { InvoiceService, OrderService, PaymentService, ServiceRequestService } from '@/lib/services';
 import { toId } from '@/lib/utils';
 
 import type { InvoiceDto } from '@/types';
 
 /*
-  A live-database walk of the SERVICE-invoice issue path (step 10; the payment side lands in step 13). It
-  drives a booking to COMPLETED, issues its invoice, and checks the scoping and idempotence the unit tests
-  cannot reach. Fixtures are namespaced by a run tag and removed in `finally`.
+  A live-database walk of billing: issuing SERVICE and ORDER invoices, recording payments, and the covering
+  payment that flips both the invoice and (for an ORDER) its order to PAID in one transaction. Fixtures are
+  namespaced by a run tag and removed in `finally`.
 */
 const BUSINESS = CODES.BUSINESS.BILLING;
 
 const requestService = new ServiceRequestService();
 const invoiceService = new InvoiceService();
+const orderService = new OrderService();
+const paymentService = new PaymentService();
 
 let checks = 0;
 
@@ -73,6 +87,18 @@ async function run(): Promise<void> {
   const centerBase = { address: '1 Test Road', city: 'Dhaka', phone: '018000000' };
   const profileA = await ServiceCenterProfile.create({ user: centerUserA._id, centerName: `${tag} A`, ...centerBase, isVerified: true });
   const profileB = await ServiceCenterProfile.create({ user: centerUserB._id, centerName: `${tag} B`, ...centerBase, isVerified: true });
+
+  const supplierUser = await User.create({ ...account('supplier'), role: USER_ROLES.SUPPLIER });
+  const supplierProfile = await SupplierProfile.create({ user: supplierUser._id, businessName: `${tag} S`, ...centerBase, isVerified: true });
+  const product = await Product.create({
+    supplier: supplierProfile._id,
+    name: `${tag} part`,
+    category: PRODUCT_CATEGORIES.FILTER,
+    sku: `${tag}-SKU`,
+    price: 10000,
+    stockQuantity: 10,
+    isActive: true,
+  });
 
   const vehicle = await Vehicle.create({
     owner: owner._id,
@@ -135,14 +161,78 @@ async function run(): Promise<void> {
     }
     pass('invoice listings are scoped to the issuing center');
 
+    // A non-payer cannot record a payment against the SERVICE invoice (total 605000).
+    const notPayer = await paymentService.recordPayment(centerAId, { invoiceId: invoice.invoiceId, amount: 605000, method: PAYMENT_METHODS.CASH });
+    expectInvoiceFailure(notPayer, BUSINESS.NOT_PAYER.CODE, 'only the payer can record a payment');
+
+    // A short payment leaves the invoice UNPAID; the covering remainder flips it to PAID.
+    const partial = expectInvoice(
+      await paymentService.recordPayment(ownerId, { invoiceId: invoice.invoiceId, amount: 100000, method: PAYMENT_METHODS.CASH }),
+      'partial payment'
+    );
+    if (partial.status !== INVOICE_STATUSES.UNPAID) {
+      throw new Error('a short payment must leave the invoice UNPAID');
+    }
+    pass('a short payment leaves the invoice UNPAID');
+
+    const settled = expectInvoice(
+      await paymentService.recordPayment(ownerId, { invoiceId: invoice.invoiceId, amount: 505000, method: PAYMENT_METHODS.BANK_TRANSFER }),
+      'covering payment'
+    );
+    if (settled.status !== INVOICE_STATUSES.PAID) {
+      throw new Error('a covering payment must flip the invoice to PAID');
+    }
+    pass('a covering payment flips the SERVICE invoice to PAID');
+
+    // An ORDER invoice, settled, flips both the invoice and its order to PAID in one transaction.
+    const orderResult = await orderService.create(ownerId, {
+      supplier: toId(supplierProfile._id),
+      items: [{ product: toId(product._id), quantity: 2 }],
+      shippingAddress: { line1: '1 Buyer Lane', city: 'Dhaka' },
+    });
+    if (!orderResult.success || orderResult.result === null) {
+      throw new Error('setup: could not place the order');
+    }
+    const placedOrderId = orderResult.result.order.orderId;
+
+    const orderInvoice = expectInvoice(
+      await invoiceService.issueOrderInvoice(toId(supplierUser._id), { orderId: placedOrderId }),
+      'issue order invoice'
+    );
+    if (
+      orderInvoice.type !== INVOICE_TYPES.ORDER ||
+      orderInvoice.status !== INVOICE_STATUSES.UNPAID ||
+      orderInvoice.subtotal + orderInvoice.tax !== orderInvoice.total
+    ) {
+      throw new Error('an ORDER invoice must be UNPAID with reconciling integer totals');
+    }
+    pass('a supplier issues an UNPAID ORDER invoice with reconciling totals');
+
+    const paidOrderInvoice = expectInvoice(
+      await paymentService.recordPayment(ownerId, { invoiceId: orderInvoice.invoiceId, amount: orderInvoice.total, method: PAYMENT_METHODS.WALLET }),
+      'settle order invoice'
+    );
+    const orderAfter = await Order.findById(placedOrderId).select('paymentStatus').lean<{ paymentStatus: string } | null>();
+    if (paidOrderInvoice.status !== INVOICE_STATUSES.PAID || orderAfter?.paymentStatus !== ORDER_PAYMENT_STATUSES.PAID) {
+      throw new Error('settling an ORDER invoice must flip both the invoice and the order to PAID');
+    }
+    pass('settling an ORDER invoice flips the invoice and the order to PAID in one transaction');
+
     console.log(`\nAll ${checks} checks passed.`);
   } finally {
-    await Invoice.deleteMany({ issuedBy: { $in: [centerUserA._id, centerUserB._id] } });
+    const invoiceIds = await Invoice.find({ owner: owner._id }).distinct('_id');
+    await Payment.deleteMany({ invoice: { $in: invoiceIds } });
+    await Invoice.deleteMany({ owner: owner._id });
+    const orderIds = await Order.find({ buyer: owner._id }).distinct('_id');
+    await OrderItem.deleteMany({ order: { $in: orderIds } });
+    await Order.deleteMany({ buyer: owner._id });
+    await Product.deleteMany({ supplier: supplierProfile._id });
     await MaintenanceRecord.deleteMany({ vehicle: vehicle._id });
     await ServiceRequest.deleteMany({ owner: owner._id });
     await Vehicle.deleteMany({ _id: vehicle._id });
     await ServiceCenterProfile.deleteMany({ _id: { $in: [profileA._id, profileB._id] } });
-    await User.deleteMany({ _id: { $in: [owner._id, centerUserA._id, centerUserB._id] } });
+    await SupplierProfile.deleteMany({ _id: supplierProfile._id });
+    await User.deleteMany({ _id: { $in: [owner._id, centerUserA._id, centerUserB._id, supplierUser._id] } });
     await mongoose.disconnect();
   }
 }

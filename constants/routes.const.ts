@@ -35,6 +35,7 @@ export const ROUTES = {
   ADMIN: { LABEL: 'Administration', HREF: '/admin' },
   ADMIN_USERS: { LABEL: 'Users', HREF: '/admin/users' },
   ADMIN_VERIFICATIONS: { LABEL: 'Verifications', HREF: '/admin/verifications' },
+  ADMIN_REPORTS: { LABEL: 'Reports', HREF: '/admin/reports' },
   OWNER: { LABEL: 'My vehicles', HREF: '/owner' },
   OWNER_VEHICLES: { LABEL: 'Vehicles', HREF: '/owner/vehicles' },
   OWNER_VEHICLES_NEW: { LABEL: 'Add a vehicle', HREF: '/owner/vehicles/new' },
@@ -47,8 +48,19 @@ export const ROUTES = {
   CENTER_RECORDS: { LABEL: 'Records', HREF: '/center/records' },
   CENTER_INVOICES: { LABEL: 'Invoices', HREF: '/center/invoices' },
   CENTER_PROFILE: { LABEL: 'Center profile', HREF: '/center/profile' },
+  CENTER_MESSAGES: { LABEL: 'Messages', HREF: '/center/messages' },
+  OWNER_MARKETPLACE: { LABEL: 'Marketplace', HREF: '/owner/marketplace' },
+  OWNER_ORDERS: { LABEL: 'Orders', HREF: '/owner/orders' },
+  OWNER_INVOICES: { LABEL: 'Invoices', HREF: '/owner/invoices' },
+  OWNER_MESSAGES: { LABEL: 'Messages', HREF: '/owner/messages' },
   SUPPLIER: { LABEL: 'Supplier', HREF: '/supplier' },
+  SUPPLIER_PRODUCTS: { LABEL: 'Products', HREF: '/supplier/products' },
+  SUPPLIER_PRODUCTS_NEW: { LABEL: 'Add a product', HREF: '/supplier/products/new' },
+  SUPPLIER_PROFILE: { LABEL: 'Supplier profile', HREF: '/supplier/profile' },
+  SUPPLIER_ORDERS: { LABEL: 'Orders', HREF: '/supplier/orders' },
+  SUPPLIER_INVOICES: { LABEL: 'Invoices', HREF: '/supplier/invoices' },
   PROFILE: { LABEL: 'Profile', HREF: '/profile' },
+  NOTIFICATIONS: { LABEL: 'Notifications', HREF: '/notifications' },
 } as const;
 
 /**
@@ -78,6 +90,7 @@ export const PROTECTED_SEGMENTS = [
   ROUTES.CENTER.HREF,
   ROUTES.SUPPLIER.HREF,
   ROUTES.PROFILE.HREF,
+  ROUTES.NOTIFICATIONS.HREF,
 ] as const satisfies readonly string[];
 
 /** Anchors on the landing page (step 2). */

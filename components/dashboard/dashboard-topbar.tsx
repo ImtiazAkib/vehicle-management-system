@@ -4,17 +4,22 @@ import { ROUTES } from '@/constants/routes.const';
 
 import { clearSessionCookie } from '@/lib/auth';
 
+import { ThemeToggle } from '@/components/shared';
+
+import { NotificationBell } from './notification-bell';
+
 import type { DashboardShellUser } from './dashboard-sidebar';
 
 type DashboardTopbarProps = {
   user: DashboardShellUser;
+  unread: number;
 };
 
 /*
   The top of the main region: who is signed in, and the way out. Sign-out is an inline server action —
   `clearSessionCookie()` then a redirect — so the button needs no client JavaScript to work.
 */
-export function DashboardTopbar({ user }: DashboardTopbarProps) {
+export function DashboardTopbar({ user, unread }: DashboardTopbarProps) {
   async function signOut() {
     'use server';
     await clearSessionCookie();
@@ -27,11 +32,15 @@ export function DashboardTopbar({ user }: DashboardTopbarProps) {
         Signed in as <span className="text-foreground font-medium">{user.name}</span>
       </p>
 
-      <form action={signOut}>
-        <button type="submit" className="border-border hover:bg-muted rounded-md border px-3 py-1.5 text-sm font-medium">
-          Sign out
-        </button>
-      </form>
+      <div className="flex items-center gap-2">
+        <ThemeToggle />
+        <NotificationBell unread={unread} />
+        <form action={signOut}>
+          <button type="submit" className="border-border hover:bg-muted rounded-md border px-3 py-1.5 text-sm font-medium">
+            Sign out
+          </button>
+        </form>
+      </div>
     </header>
   );
 }

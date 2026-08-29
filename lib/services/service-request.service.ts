@@ -16,6 +16,7 @@ import type { BookingCreateOutput, BookingTransitionOutput } from '@/lib/schemas
 import { BOOKING_ACTION_ACTORS, canTransition, toId } from '@/lib/utils';
 
 import { MaintenanceService } from './maintenance.service';
+import { NotificationService } from './notification.service';
 
 import type { ServiceCenterProfileEntity } from '@/models/service-center-profile.model';
 import type { ServiceRequestEntity } from '@/models/service-request.model';
@@ -32,8 +33,17 @@ const BUSINESS = CODES.BUSINESS.BOOKINGS;
  * goes through {@link transition}, which asks the pure {@link canTransition} guard whether the edge is
  * legal and refuses otherwise. Owner-facing and center-facing reads are each scoped to the requester.
  */
+const TRANSITION_MESSAGES: Record<BookingTransitionOutput['action'], string> = {
+  accept: 'Your booking was accepted.',
+  decline: 'Your booking was declined.',
+  start: 'Work has started on your booking.',
+  complete: 'Your booking is complete.',
+  cancel: 'A booking was cancelled.',
+};
+
 export class ServiceRequestService {
   private readonly maintenance = new MaintenanceService();
+  private readonly notifications = new NotificationService();
 
   /**
    * An owner's bookings across all their vehicles, newest first.
@@ -211,6 +221,8 @@ export class ServiceRequestService {
       request.status = next;
       await request.save();
 
+      await this.notifyTransition(input.action, request);
+
       return singleSuccess(serviceRequestFromEntity(request));
     } catch (error) {
       log.error({ err: error }, 'Transitioning a booking failed');
@@ -245,6 +257,27 @@ export class ServiceRequestService {
     }
 
     return null;
+  }
+
+  /** Notify the party a transition affects: the owner on a center's move, the center on the owner's cancel. */
+  private async notifyTransition(
+    action: BookingTransitionOutput['action'],
+    request: Pick<ServiceRequestEntity, '_id' | 'owner' | 'serviceCenter' | 'serviceType'>
+  ): Promise<void> {
+    const body = TRANSITION_MESSAGES[action];
+    const data = { serviceRequestId: toId(request._id) };
+
+    if (action === 'cancel') {
+      const profile = await ServiceCenterProfile.findById(request.serviceCenter).select('user').lean<{ user: Types.ObjectId } | null>();
+
+      if (profile) {
+        await this.notifications.create({ userId: toId(profile.user), type: 'booking', title: request.serviceType, body, data });
+      }
+
+      return;
+    }
+
+    await this.notifications.create({ userId: toId(request.owner), type: 'booking', title: request.serviceType, body, data });
   }
 
   /** The `ServiceCenterProfile` id for a center account, or null when the account has no profile yet. */

@@ -14,6 +14,8 @@ export type ProductAttributes = {
   stockQuantity: number;
   imageStorageKey?: string;
   isActive: boolean;
+  ratingAvg: number;
+  ratingCount: number;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -31,6 +33,8 @@ const productSchema = new Schema<ProductAttributes, ProductModel>(
     stockQuantity: { type: Number, required: true, min: 0, default: 0 },
     imageStorageKey: { type: String, maxlength: 512 },
     isActive: { type: Boolean, required: true, default: true },
+    ratingAvg: { type: Number, required: true, min: 0, default: 0 },
+    ratingCount: { type: Number, required: true, min: 0, default: 0 },
   },
   { timestamps: true }
 );
