@@ -29,6 +29,7 @@
     "cooldown",
     "crawlable",
     "datetime",
+    "DEMOVIN",
     "forgeable",
     "gridfs",
     "invoiceable",

@@ -33,33 +33,34 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 
 ## Status at a glance
 
-| #              | Step                                            | Phase                                       | Status         |
-| -------------- | ----------------------------------------------- | ------------------------------------------- | -------------- |
-| [0](#step-0)   | Project scaffold                                | Foundation & tooling                        | ✅ Done        |
-| [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done        |
-| [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done        |
-| [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done        |
-| [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done        |
-| [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done        |
-| [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ✅ Done        |
-| [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ✅ Done        |
-| [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ✅ Done        |
-| [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ✅ Done        |
-| [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done        |
-| [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ✅ Done        |
-| [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ✅ Done        |
-| [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ✅ Done        |
-| [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ✅ Done        |
-| [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ✅ Done        |
-| [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ✅ Done        |
-| [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ✅ Done        |
-| [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ✅ Done        |
-| [19](#step-19) | Polish                                          | Hardening, polish & release                 | ✅ Done        |
-| [20](#step-20) | Testing & deployment                            | Hardening, polish & release                 | ⬜ Not started |
+| #              | Step                                            | Phase                                       | Status  |
+| -------------- | ----------------------------------------------- | ------------------------------------------- | ------- |
+| [0](#step-0)   | Project scaffold                                | Foundation & tooling                        | ✅ Done |
+| [1](#step-1)   | Foundations                                     | Foundation & tooling                        | ✅ Done |
+| [2](#step-2)   | SEO, structured data & llms.txt                 | Discoverability                             | ✅ Done |
+| [3](#step-3)   | Data model                                      | Domain model & authentication               | ✅ Done |
+| [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done |
+| [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done |
+| [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ✅ Done |
+| [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ✅ Done |
+| [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ✅ Done |
+| [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ✅ Done |
+| [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ✅ Done |
+| [11](#step-11) | Marketplace: suppliers & products               | Marketplace, orders & billing               | ✅ Done |
+| [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ✅ Done |
+| [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ✅ Done |
+| [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ✅ Done |
+| [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ✅ Done |
+| [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ✅ Done |
+| [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ✅ Done |
+| [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ✅ Done |
+| [19](#step-19) | Polish                                          | Hardening, polish & release                 | ✅ Done |
+| [20](#step-20) | Testing & deployment                            | Hardening, polish & release                 | ✅ Done |
 
-Steps 0–10 are ✅ Done — the foundation, the domain model and auth, the four dashboards, and the full
+All 21 rows are ✅ Done — the foundation, the domain model and auth, the four dashboards, the full
 vehicles-maintenance-booking phase (vehicle records, the reminder cron, service booking and center operations, through
-to durable records and SERVICE invoices) all land; steps 11–20 remain ⬜. The whole shape was decided before a line was
+to durable records and SERVICE invoices), and the marketplace, ordering, payments, messaging, notifications, reviews,
+reports, hardening, polish, and the testing-and-deployment gate all land. The whole shape was decided before a line was
 written — this is a from-scratch build guide — so steps run in order and the [Roadmap](#roadmap) groups them into the
 phases a schedule can hang on. A row turns ✅ only when its step clears every gate in
 [Definition of done](#definition-of-done) — the table is a ledger, not a wish.
@@ -1573,8 +1574,9 @@ components/{owner,center,supplier,admin}   loading / empty / error states audite
 
 **Goal.** Lock quality behind a suite that runs the same way every time, then ship both PM2 apps. This is the last
 step: the co-located Vitest unit tests over the pure cores, the `verify:*` integration harnesses and the smoke script
-against a live database, the two seed commands, the GitHub Actions pipeline, the standalone build behind a reverse
-proxy on port `3104`, the second PM2 app that runs the reminder cron, and the deployment runbook that brings both up.
+against a live database, the two seed commands, the `pre-push` build guard that gates every push locally, the
+standalone build behind a reverse proxy on port `3104`, the second PM2 app that runs the reminder cron, and the
+deployment runbook that brings both up.
 It sits last because you cannot regression-test features that do not exist, and you cannot deploy a build the gates
 have not passed.
 
@@ -1586,13 +1588,14 @@ lib/utils/money.util.test.ts                      minor-unit conversion + format
 lib/services/maintenance/schedule-due.test.ts     computeDue — UPCOMING → DUE → OVERDUE from date and mileage
 lib/services/service-request/transition.test.ts   the booking legal-transition guard (PENDING → ACCEPTED → … no skips)
 lib/services/order/transition.test.ts             the order legal-transition guard (PENDING → CONFIRMED → … no skips)
-lib/storage/file-signature.test.ts                magic-byte acceptance (PNG / JPEG / WebP), SVG refused
+lib/utils/conversation-access.utils.test.ts       the messaging participant guard — only the two parties may read or send
+lib/utils/rating.utils.test.ts                    computeRatingAggregate — the running average a review recompute rests on
 scripts/verify-*.ts                               data-model · accounts · vehicles · scheduling · bookings · marketplace · orders · invoices · reports
-scripts/smoke.ts                                  runs the verify:* family in sequence against a live database
+package.json "smoke"                              chains the verify:* family in sequence against a live database
 scripts/seed-super-admin.ts                       the single super administrator, idempotent, from SEED_SUPER_ADMIN_*
-scripts/seed-demo.ts                              throwaway demo data — an admin, 2 centers, 2 suppliers, owners, products, a booking, an order
+scripts/seed-demo.ts                              idempotent demo data — one owner, one service center, one supplier, a vehicle, two products
 scripts/send-reminders.ts                         the maintenance-reminder cron entrypoint (node-cron)
-.github/workflows/ci.yml                          lint → format → build → test on every push and PR
+.husky/pre-push                                   the build guard — test → typecheck → build before every push (CI stays on the machine)
 ecosystem.config.js                               two PM2 apps — the web app on 3104 + the reminder cron via cron_restart
 next.config.ts                                    output: 'standalone' when VERCEL is unset
 docs/DEPLOYMENT.md                                PM2 bring-up, the nginx proxy_set_header, production env, the staging verify run
@@ -1607,9 +1610,11 @@ docs/DEPLOYMENT.md                                PM2 bring-up, the nginx proxy_
 - **What needs a database is proven by the `verify:*` harnesses, not mocked.** Each harness runs against a live,
   mutable MongoDB, mutates real documents through the real services, asserts the outcome, and cleans up after itself;
   `smoke` chains them so one command proves every database path in order. A mock proves your mock, not your service.
-- **CI gates every merge with the same four steps in the same order.** `lint → format → build → test` runs in GitHub
-  Actions on every push and PR, and `build` is the type check because `env/server.ts` is imported by `next.config.ts`
-  — an invalid environment fails the build, not runtime. **A gate that runs only on your laptop is not a gate.**
+- **The gate runs at the push, not in the cloud.** `lint` and `format` run on every commit (Husky `pre-commit`); the
+  `pre-push` hook then runs `test → typecheck → build`, and `build` is the real type check because `env/server.ts` is
+  imported by `next.config.ts` — an invalid environment fails the build, not runtime. GitHub Actions was deliberately
+  dropped: this is a single-maintainer build with no shared remote to gate, so the guard lives on the push where it
+  costs nothing to run and nothing to host. **A broken build never leaves the machine.**
 - **The deployment is two PM2 apps, not one.** The web app runs the standalone `server.js` on port `3104` behind a
   reverse proxy that terminates TLS and sets `x-forwarded-for` (which is why `TRUSTED_PROXY` exists and why the runbook
   names the exact `proxy_set_header`); the second app runs `npm run send:reminders` on a `cron_restart`, so a schedule
@@ -1620,12 +1625,12 @@ docs/DEPLOYMENT.md                                PM2 bring-up, the nginx proxy_
 
 **Acceptance criteria.** The step is done when:
 
-- `npm run test` is green — the six co-located Vitest suites (session, money, schedule-due, booking-transition,
-  order-transition, file-signature) pass with no database.
+- `npm run test` is green — the seven co-located Vitest suites (session, money, schedule-due, booking-transition,
+  order-transition, conversation-access, rating) pass with no database.
 - `npm run smoke` passes against a live database, running the nine `verify:*` harnesses in sequence with each cleaning
-  up after itself, and `npm run seed:super-admin` is idempotent on a second run.
-- The GitHub Actions pipeline passes `lint → format → build → test` on a pull request, and `npm run build:linux`
-  produces the standalone artifact from a green `next build`.
+  up after itself, and both `npm run seed:super-admin` and `npm run seed:demo` are idempotent on a second run.
+- The `pre-push` build guard passes `test → typecheck → build` before a push reaches the remote, and `npm run
+build:linux` produces the standalone artifact from a green `next build`.
 - `pm2 start ecosystem.config.js` brings up both apps — the web app answering `curl -I` on port `3104` with the
   security headers, and the reminder app showing as periodically running via `cron_restart` in `pm2 status`.
 - `docs/DEPLOYMENT.md` gives the exact PM2 bring-up, the nginx `proxy_set_header X-Forwarded-For` the limiter depends
@@ -1637,13 +1642,14 @@ docs/DEPLOYMENT.md                                PM2 bring-up, the nginx proxy_
 
 Real work that is deliberately parked. Each item names the step that surfaced it.
 
-| Item                                | Why it is parked                                                                                                                                   |
-| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Predictive maintenance              | Reminders are interval-based; mileage-trend prediction needs a model and more history. Surfaced in [step 8](#step-8).                              |
-| OBD-II / telematics ingest          | Mileage is entered by the owner; automatic ingest from a device is a separate integration. Surfaced in [step 7](#step-7).                          |
-| Fleet / multi-vehicle organizations | Accounts are single-owner; fleet accounts with sub-users need a tenancy model. Surfaced in [step 6](#step-6).                                      |
-| Multi-supplier cart                 | An order targets one supplier; a basket spanning suppliers needs order-splitting. Surfaced in [step 12](#step-12).                                 |
-| Internationalization                | English-only for now; the [locale] segment and a message pipeline are deferred (the academic sibling carries this). Surfaced in [step 2](#step-2). |
-| Per-user notification preferences   | Notifications go to in-app and email; per-user opt-out of the email echo is deferred. Surfaced in [step 15](#step-15).                             |
-| Revoking a live session             | Revocation lands within the hour via re-validation; instant revoke needs a sessionVersion. Surfaced in [step 4](#step-4).                          |
-| Storybook + Playwright E2E          | Unit + integration harnesses cover the cores; component and end-to-end suites are deferred. Surfaced in [step 20](#step-20).                       |
+| Item                                | Why it is parked                                                                                                                                                                                           |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Predictive maintenance              | Reminders are interval-based; mileage-trend prediction needs a model and more history. Surfaced in [step 8](#step-8).                                                                                      |
+| OBD-II / telematics ingest          | Mileage is entered by the owner; automatic ingest from a device is a separate integration. Surfaced in [step 7](#step-7).                                                                                  |
+| Fleet / multi-vehicle organizations | Accounts are single-owner; fleet accounts with sub-users need a tenancy model. Surfaced in [step 6](#step-6).                                                                                              |
+| Multi-supplier cart                 | An order targets one supplier; a basket spanning suppliers needs order-splitting. Surfaced in [step 12](#step-12).                                                                                         |
+| Internationalization                | English-only for now; the [locale] segment and a message pipeline are deferred (the academic sibling carries this). Surfaced in [step 2](#step-2).                                                         |
+| Per-user notification preferences   | Notifications go to in-app and email; per-user opt-out of the email echo is deferred. Surfaced in [step 15](#step-15).                                                                                     |
+| Revoking a live session             | Revocation lands within the hour via re-validation; instant revoke needs a sessionVersion. Surfaced in [step 4](#step-4).                                                                                  |
+| Storybook + Playwright E2E          | Unit + integration harnesses cover the cores; component and end-to-end suites are deferred. Surfaced in [step 20](#step-20).                                                                               |
+| File uploads (images + attachments) | Vehicle/product images and message attachments are stored as keys but no upload path or GridFS store ships yet; the magic-byte `file-signature` test is parked with them. Surfaced in [step 20](#step-20). |
