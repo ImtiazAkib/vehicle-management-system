@@ -16,6 +16,7 @@ import type { OrderCreateOutput } from '@/lib/schemas';
 import { canAdvanceOrder, toId } from '@/lib/utils';
 import type { OrderAction } from '@/lib/utils';
 
+import { NotificationService } from './notification.service';
 import { resolveSupplierProfileId } from './supplier.service';
 
 import type { OrderItemEntity } from '@/models/order-item.model';
@@ -57,6 +58,8 @@ function isStockShortfall(error: unknown): error is StockShortfall {
  * cancel it before it ships, and a cancel restocks exactly what it reserved.
  */
 export class OrderService {
+  private readonly notifications = new NotificationService();
+
   /**
    * Place an order. Every line's `unitPrice` is snapshotted from the catalog, stock is decremented with a
    * conditional `$inc` inside one transaction — so if any line lacks stock the whole order is refused and
@@ -208,6 +211,14 @@ export class OrderService {
 
       order.status = next;
       await order.save();
+
+      await this.notifications.create({
+        userId: toId(order.buyer),
+        type: 'order',
+        title: 'Order update',
+        body: `Your order is now ${next.toLowerCase()}.`,
+        data: { orderId: toId(order._id) },
+      });
 
       return singleSuccess(orderFromEntity(order));
     } catch (error) {

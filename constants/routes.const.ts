@@ -59,6 +59,7 @@ export const ROUTES = {
   SUPPLIER_ORDERS: { LABEL: 'Orders', HREF: '/supplier/orders' },
   SUPPLIER_INVOICES: { LABEL: 'Invoices', HREF: '/supplier/invoices' },
   PROFILE: { LABEL: 'Profile', HREF: '/profile' },
+  NOTIFICATIONS: { LABEL: 'Notifications', HREF: '/notifications' },
 } as const;
 
 /**
@@ -88,6 +89,7 @@ export const PROTECTED_SEGMENTS = [
   ROUTES.CENTER.HREF,
   ROUTES.SUPPLIER.HREF,
   ROUTES.PROFILE.HREF,
+  ROUTES.NOTIFICATIONS.HREF,
 ] as const satisfies readonly string[];
 
 /** Anchors on the landing page (step 2). */

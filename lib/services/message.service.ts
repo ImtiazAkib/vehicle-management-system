@@ -1,5 +1,8 @@
+import { Types } from 'mongoose';
+
 import { Conversation } from '@/models/conversation.model';
 import { Message } from '@/models/message.model';
+import { ServiceCenterProfile } from '@/models/service-center-profile.model';
 import { ServiceRequest } from '@/models/service-request.model';
 import { ConversationDto, MessageDto, conversationFromEntity, messageFromEntity } from '@/types';
 
@@ -24,6 +27,7 @@ import type { ErrorDto } from '@/lib/result';
 import type { ConversationStartOutput, MessageSendOutput } from '@/lib/schemas';
 import { isConversationParticipant, toId } from '@/lib/utils';
 
+import { NotificationService } from './notification.service';
 import { resolveCenterProfileId } from './service-center.service';
 
 import type { ConversationEntity } from '@/models/conversation.model';
@@ -49,6 +53,8 @@ export type MessageActor = {
  * refused, whatever the screen shows.
  */
 export class MessageService {
+  private readonly notifications = new NotificationService();
+
   /**
    * Start or find the conversation for one of the owner's bookings. The center is taken from the booking,
    * and the same owner+center+booking always returns the one thread rather than spawning a second.
@@ -175,12 +181,14 @@ export class MessageService {
 
       const access = await this.authorize(actor, input.conversationId);
 
-      if (access.error) {
-        return singleFailure(access.error);
+      if (access.error || !access.conversation) {
+        return singleFailure(access.error ?? createError(VALIDATION.CONVERSATION_NOT_FOUND.CODE, VALIDATION.CONVERSATION_NOT_FOUND.MESSAGE));
       }
 
       const message = await Message.create({ conversation: input.conversationId, sender: actor.userId, body: input.body });
       await Conversation.updateOne({ _id: input.conversationId }, { $set: { lastMessageAt: new Date() } });
+
+      await this.notifyOther(actor, access.conversation);
 
       return singleSuccess(messageFromEntity(message));
     } catch (error) {
@@ -218,8 +226,8 @@ export class MessageService {
     }
   }
 
-  /** Load the conversation and check the actor is a participant, or return the error to fail with. */
-  private async authorize(actor: MessageActor, conversationId: string): Promise<{ error?: ErrorDto }> {
+  /** Load the conversation and check the actor is a participant; return it, or the error to fail with. */
+  private async authorize(actor: MessageActor, conversationId: string): Promise<{ conversation?: ConversationEntity; error?: ErrorDto }> {
     const conversation = await Conversation.findById(conversationId).lean<ConversationEntity | null>();
 
     if (!conversation) {
@@ -233,6 +241,29 @@ export class MessageService {
       return { error: createError(BUSINESS.FORBIDDEN.CODE, BUSINESS.FORBIDDEN.MESSAGE) };
     }
 
-    return {};
+    return { conversation };
+  }
+
+  /** Notify whichever participant did not send the message. */
+  private async notifyOther(actor: MessageActor, conversation: ConversationEntity): Promise<void> {
+    const ownerId = toId(conversation.owner);
+    let recipientId: string | null = null;
+
+    if (actor.userId === ownerId) {
+      const profile = await ServiceCenterProfile.findById(conversation.serviceCenter).select('user').lean<{ user: Types.ObjectId } | null>();
+      recipientId = profile ? toId(profile.user) : null;
+    } else {
+      recipientId = ownerId;
+    }
+
+    if (recipientId) {
+      await this.notifications.create({
+        userId: recipientId,
+        type: 'message',
+        title: 'New message',
+        body: 'You have a new message about a booking.',
+        data: { conversationId: toId(conversation._id) },
+      });
+    }
   }
 }

@@ -50,7 +50,7 @@ have landed — through vehicles, the maintenance cron, service booking and cent
 | [12](#step-12) | Orders & fulfillment                            | Marketplace, orders & billing               | ✅ Done        |
 | [13](#step-13) | Invoices & payments                             | Marketplace, orders & billing               | ✅ Done        |
 | [14](#step-14) | Messaging                                       | Messaging, notifications, reviews & reports | ✅ Done        |
-| [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ⬜ Not started |
+| [15](#step-15) | Notifications                                   | Messaging, notifications, reviews & reports | ✅ Done        |
 | [16](#step-16) | Reviews & ratings                               | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [17](#step-17) | Reports & analytics                             | Messaging, notifications, reviews & reports | ⬜ Not started |
 | [18](#step-18) | Hardening                                       | Hardening, polish & release                 | ⬜ Not started |
@@ -1255,7 +1255,7 @@ The step is done when:
 
 <a id="step-15"></a>
 
-### Step 15 - Notifications
+### Step 15 - Notifications ✅ Done
 
 **Goal.** A single, recipient-scoped feed fed by the domain events that already exist — a maintenance schedule that
 fell `DUE`, a booking that changed status, an order or payment that moved, a new message — surfaced in-app and echoed

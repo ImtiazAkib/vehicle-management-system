@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+import { Notification } from '@/models/notification.model';
 import { OrderItem } from '@/models/order-item.model';
 import { Order } from '@/models/order.model';
 import { Product } from '@/models/product.model';
@@ -148,6 +149,11 @@ async function run(): Promise<void> {
     }
     pass('a placed order walks confirm → pack → ship → deliver');
 
+    if ((await Notification.countDocuments({ user: buyer._id, type: 'order' })) < 1) {
+      throw new Error('an order advance must notify the buyer');
+    }
+    pass('advancing an order notifies the buyer');
+
     // 5. Cancel after ship is refused.
     expectFailure(await orders.cancel(buyerId, orderId), BUSINESS.ILLEGAL_TRANSITION.CODE, 'a cancel after the goods ship is refused');
 
@@ -165,6 +171,7 @@ async function run(): Promise<void> {
 
     console.log(`\nAll ${checks} checks passed.`);
   } finally {
+    await Notification.deleteMany({ user: buyer._id });
     const orderIds = await Order.find({ buyer: buyer._id }).distinct('_id');
     await OrderItem.deleteMany({ order: { $in: orderIds } });
     await Order.deleteMany({ buyer: buyer._id });
