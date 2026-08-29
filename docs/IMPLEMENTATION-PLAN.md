@@ -41,7 +41,7 @@ working state — and because nothing is built yet, every one starts **⬜ Not s
 | [4](#step-4)   | Authentication                                  | Domain model & authentication               | ✅ Done        |
 | [5](#step-5)   | Dashboard shell & RBAC                          | Dashboards & accounts                       | ✅ Done        |
 | [6](#step-6)   | Accounts: registration, verification & approval | Dashboards & accounts                       | ✅ Done        |
-| [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ⬜ Not started |
+| [7](#step-7)   | Vehicle records                                 | Vehicles, maintenance & booking             | ✅ Done        |
 | [8](#step-8)   | Maintenance scheduler & reminders               | Vehicles, maintenance & booking             | ⬜ Not started |
 | [9](#step-9)   | Service booking                                 | Vehicles, maintenance & booking             | ⬜ Not started |
 | [10](#step-10) | Service-center operations                       | Vehicles, maintenance & booking             | ⬜ Not started |
@@ -704,7 +704,7 @@ Script       scripts/verify-accounts.ts        manual integration harness — np
 
 <a id="step-7"></a>
 
-### Step 7 - Vehicle records
+### Step 7 - Vehicle records ✅ Done
 
 **Goal.** The owner-facing vehicle registry — the spine every other owner feature hangs off. An owner registers a car,
 edits it, retires it, and attaches a photo; schedules, maintenance records, bookings and invoices all point back at the
